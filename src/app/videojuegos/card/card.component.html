@@ -1,0 +1,31 @@
+
+<div class="card text-dark h-100">
+  <div class="card-body bg-gradient-gray d-flex flex-column justify-content-between">
+    @if(videojuego.imagenPrincipal)
+    {
+    <img [src]="videojuego.imagenPrincipal" alt="Imagen del videojuego" class="card-img-top img-fluid rounded imagen"> <!-- Añadir la imagen aquí -->
+
+    }
+    <h5 class="card-title align-self-start">{{videojuego.titulo}}</h5>
+    <div class="d-flex flex-column align-items-start">
+      <p class="card-text mb-0" style="font-weight: bold;">{{videojuego.precio}} €</p>
+      @if(videojuego.estado == 'Precintado'){
+        <span class="badge bg-success">Precintado</span>
+
+      }
+      @if(videojuego.estado == 'Usado'){
+        <span class="badge bg-warning">Usado</span>
+
+      }
+      @if(videojuego.estado == 'Como nuevo'){
+        <span class="badge bg-info">Como nuevo</span>
+
+      }
+      @if(videojuego.estado == 'Mal estado'){
+        <span class="badge bg-danger">Mal estado</span>
+
+      }
+    </div>
+    <button [routerLink]="['/videojuegos/', videojuego._id]" class="btn btn-secondary align-self-end mt-auto">Ir a detalles</button>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="form">
+    <div class="form-toggle"></div>
+    <div class="form-panel one">
+        <div class="form-header">
+            <h1 class="dark">Registro</h1>
+        </div>
+        <div class="form-content">
+            <form [formGroup]="formGroup" (ngSubmit)="register()">
+                <div class="form-group">
+                    <label for="username">Nombre usuario</label>
+                    <input type="text" id="username" name="nombre" required="required" formControlName="nombre"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Email</label>
+                    <input type="email" id="email" name="email" required="required" formControlName="email"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" required="required" formControlName="password"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Imagen perfil</label>
+                    <input type="file" id="imagen" name="imagen" required="required"  formControlName="imagen"
+                    (change)="changeImage($event)" />
+                </div>
+              
+                <div class="form-group">
+                    <button type="submit" class="btn btn-dark">Completar registro</button>
+                </div>
+            </form>
+            <a [routerLink]="['/auth/login']">Ir a login</a>
+        </div>
+    </div>
+ 
+</div>

@@ -1,0 +1,119 @@
+@font-face {
+  font-family: 'RetroGaming';
+  src: url('assets/fonts/RetroGaming.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.list-group-item {
+    transition: background-color 0.3s ease;
+  }
+
+  .list-group-item:hover {
+    background-color: orange; 
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .nav-item:hover {
+    background-color: orange; 
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .dropdown-item:hover {
+    background-color: whitesmoke;
+    cursor: pointer;
+  }
+
+
+  html{
+    font-size: 100%;
+  }
+
+  p{
+    font-size: 1em;
+  }
+  h3{
+    font-size: 1.75em;
+  }
+  h2{
+    font-size: 1.5em;
+  }
+  h1{
+    font-size: 2em;
+  }
+
+  #iconoLogin{
+    border-radius: 50%;
+    margin-left: 20px;
+    margin-right: 10px;
+  }
+  #iconoCarrito{
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .logout{
+    margin-right: 10px;
+    border-radius: 20px;
+    
+
+}
+ 
+  @media (min-width: 768px) {
+    html {
+      font-size: 1em;
+    }
+  
+    h3 {
+      font-size: 2em;
+    }
+  
+    h2 {
+      font-size: 1.75em;
+    }
+  
+    h1 {
+      font-size: 2.25em;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    html {
+      font-size: 0.75em;
+    }
+  
+    h3 {
+      font-size: 1.5em;
+    }
+  
+    h2 {
+      font-size: 1.25em;
+    }
+  
+    h1 {
+      font-size: 1.75em;
+    }
+  }
+  
+  @media (max-width: 480px) {
+
+    html {
+      font-size: 0.5em;
+    }
+  
+    h3 {
+      font-size: 1.25em;
+    }
+  
+    h2 {
+      font-size: 1em;
+    }
+  
+    h1 {
+      font-size: 1.5em;
+    }
+  }
+  
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

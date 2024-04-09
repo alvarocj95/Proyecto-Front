@@ -1,0 +1,15 @@
+#profile {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+  }
+  #avatar {
+    border-radius: 50%;
+    max-width: 100px;
+  }
+  #name {
+    margin-top: 10px;
+  }
+  #email {
+    margin-bottom: 20px;
+  }

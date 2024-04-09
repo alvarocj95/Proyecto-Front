@@ -1,0 +1,50 @@
+#infoCompleta{
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+
+
+#imagenJuego img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+#info {
+    padding: 20px;
+}
+
+#precios h2 {
+    margin-top: 20px;
+}
+
+.col-4 img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important; /* Cambia el color de fondo a uno más claro */
+}
+
+.rounded {
+    border-radius: 10px !important; /* Añade bordes redondeados a todos los elementos */
+}
+
+.shadow {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Añade una sombra suave a los elementos */
+}
+
+h1, h2 {
+    color: #333; 
+    text-transform: uppercase;
+}
+
+a{
+    color: #333;
+    text-decoration: none;
+}
+
+a:hover {
+    color: orange;
+  }

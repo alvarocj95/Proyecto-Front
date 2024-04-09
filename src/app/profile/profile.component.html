@@ -1,0 +1,94 @@
+<div class="container">
+  <div class="row mt-4" id="profile">
+    <div class="col-3">
+      <div class="text-center">
+        <img class="w-100" id="avatar" src="/assets/Resident-Evil.jpg" alt="Avatar" />
+      </div>
+    </div>
+    <div class="col-9" id="profileInfo">
+      <h4 id="name">{{usuario.nombre}}</h4>
+      <h4 id="email">
+        <small class="text-muted">{{usuario.email}}</small>
+      </h4>
+      <star-rating [rating]="usuario.valoracion"></star-rating>
+
+
+    </div>
+    @if(logged() && !id)
+    {
+    <a class="btn btn-outline-danger" [routerLink]="['/profile/me']" (click)="logout()">Cerrar sesión</a>
+    }
+  </div>
+  <div class="mt-4" id="map">
+    @if(videoJuegos.length > 0)
+    {
+    @if(id)
+    {
+    <h1>Videojuegos de {{usuario.nombre}}</h1>
+    }
+    @else {
+    <h1>Mis videojuegos</h1>
+    }
+    @for (videojuego of videoJuegos; track videojuego._id) {
+    <div class="col-lg-3 col-md-4 col-sm-6 mb-3 ">
+      <app-card [videojuego]="videojuego"></app-card>
+    </div>
+    }
+    }
+  </div>
+  <h1>Mis transacciones</h1>
+  <div class="container-fluid">
+    @for (transaccion of transacciones; track transaccion._id)
+    {
+    @if(transaccion.idVendedor._id == usuario._id || transaccion.idComprador._id == usuario._id)
+    {
+    <div class="row my-3">
+      <div class="col-md-8">
+        <div class="card h-100">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">Detalles de la transacción</h5>
+            <p class="card-text">Vendedor: {{transaccion.idVendedor.nombre}}</p>
+            <p class="card-text">Artículo: {{transaccion.idArticulo.titulo}}</p>
+            <p class="card-text">Fecha: {{transaccion.fecha | date: 'MM/dd/yyyy hh:mm a'}}</p>
+            @if(transaccion.estado == 'Aceptada' || transaccion.estado == 'Rechazada'){
+            <star-rating [rating]="usuario.valoracion" (ratingChange)="usuario.valoracion = $event"></star-rating>
+            }
+
+            @if(transaccion.estado == 'Pendiente')
+            {
+            <span class="badge bg-warning">Pendiente</span>
+            }
+            @else if(transaccion.estado == 'Rechazada')
+            {
+            <span class="badge bg-danger">Rechazada</span>
+            }
+            @else if(transaccion.estado == 'Aceptada')
+            {
+            <span class="badge bg-success">Aceptada</span>
+            }
+            @if(transaccion.idVendedor._id == usuario._id && transaccion.estado != 'Aceptada' && transaccion.estado != 'Rechazada')
+            {
+            <swal #confirmDialog title="¿Estás seguro de rechazar esta venta?" text="Este cambio no podrá deshacerse" icon="question"
+              [showDenyButton]="true" [focusCancel]="true"></swal>
+
+              <swal #confirmDialog2 title="¿Estás seguro de aceptar esta venta?" text="Este cambio no podrá deshacerse" icon="question"
+              [showDenyButton]="true" [focusCancel]="true"></swal>
+            <div class="mt-3">
+              <button type="button" class="btn btn-dark me-2" (click)="confirmarRechazo(transaccion._id)">Rechazar</button>
+
+              <button type="button" class="btn btn-dark" (click)="confirmarVenta(transaccion._id)">Aceptar</button>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <img [src]="transaccion.idArticulo.imagenPrincipal" alt="Imagen del videojuego" class="img-fluid rounded">
+      </div>
+    </div>
+    }
+    }
+  </div>
+
+
+</div>
