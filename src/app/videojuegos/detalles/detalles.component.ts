@@ -28,6 +28,7 @@ export class DetallesComponent implements OnInit{
   transacciones!: Transaccion[];
   #authService = inject(AuthService);
   logged = computed(() => this.#authService.logged());
+  pendiente: boolean = false;
 
   
 
@@ -54,25 +55,47 @@ export class DetallesComponent implements OnInit{
         }
       });
     }
-   
- 
+
+
+    
   }
   mostrar(){
     console.log("Funciona", this.id);
   }
 
   addCarrito(){
-    this.#transaccionService.nuevaTransaccion(this.videojuego._id, this.usuarioLogueado._id, this.usuario._id).subscribe({
-      next: () => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Petición realizada correctamente',
-          text: 'El vendedor se pondrá en contacto contigo',
-        });
-      },
-      error: (error) => {
-        console.error("Error al realizar la transacción:", error);
-      }
-    })
+    this.#transaccionService
+      .getTransacciones(this.usuarioLogueado._id)
+      .subscribe({
+        next: (transacciones) => {
+          this.transacciones = transacciones;
+          this.transacciones.forEach((transaccion) => {
+            if(transaccion.idArticulo._id == this.videojuego._id && transaccion.idComprador._id == this.usuarioLogueado._id ){
+              this.pendiente = true;
+              Swal.fire({
+                icon: 'warning',
+                title: 'Ya tienes una transacción pendiente para este videojuego',
+              });
+            }
+          })
+          if(this.pendiente == false){
+            this.#transaccionService.nuevaTransaccion(this.videojuego._id, this.usuarioLogueado._id, this.usuario._id).subscribe({
+              next: () => {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Petición realizada correctamente',
+                  text: 'El vendedor se pondrá en contacto contigo',
+                });
+              },
+              error: (error) => {
+                console.error("Error al realizar la transacción:", error);
+              }
+            })
+          }
+        },
+        error: (error) => {
+          console.error("Error al obtener las transacciones:", error);
+        }
+      });
   }
 }

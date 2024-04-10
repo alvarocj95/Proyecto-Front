@@ -26,5 +26,6 @@ export interface VideojuegoNuevo{
     imagenSecundaria?: string;
     imagenTerciaria?: string;
     imagenCuaternaria?: string;
+    
 }
 

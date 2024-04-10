@@ -1,54 +1,3 @@
-<!-- <div class="row" id="infoCompleta">
-    <div  class="col-lg-6">
-        <div id="imagenJuego" class="mb-4">
-            <img [src]="videojuego.imagenPrincipal" alt="Imagen del juego" class="img-fluid rounded">
-        </div>
-       
-    </div>
-    <div class="col-lg-6 bg-light rounded shadow mb-3" id="info">
-        <h1 class="mb-4">{{videojuego.titulo}}</h1>
-        <p>{{videojuego.descripcion}}</p>
-        <div class="mb-4">
-            <h2>Más fotografías del artículo</h2>
-            <div class="row">
-                <div class="col-4">
-                    <img [src]="videojuego.imagenSecundaria" alt="Juego 1" class="img-fluid rounded" style="width: 100%;">
-                </div>
-                <div class="col-4">
-                    <img [src]="videojuego.imagenTerciaria" alt="Juego 2" class="img-fluid rounded" style="width: 100%;">
-                </div>
-                <div class="col-4">
-                    <img [src]="videojuego.imagenCuaternaria" alt="Juego 3" class="img-fluid rounded" style="width: 100%;">
-                </div>
-                <div id="info">
-                    <h2>Precio: {{videojuego.precio}}</h2>
-                    <h2>Año: {{videojuego.lanzamiento}}</h2>
-                    <h2>⭐⭐⭐⭐⭐</h2>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row bg-light rounded shadow mt-3">
-    <div class="col-12 mt-4 mb-4 text-center">
-        <h2>Imágenes del juego</h2>
-        <div class="row">
-            <div class="col-md-4 mb-2">
-                <img src="/assets/pikachu.png" alt="Imagen 1" class="img-fluid rounded" style="width: 100%;">
-            </div>
-            <div class="col-md-4 mb-2">
-                <img src="/assets/game2.png" alt="Imagen 2" class="img-fluid rounded" style="width: 100%;">
-            </div>
-            <div class="col-md-4 mb-2">
-                <img src="/assets/leaders.jpg" alt="Imagen 3" class="img-fluid rounded" style="width: 100%;">
-            </div>
-        </div>
-    </div>
-    <div class="col-12 mt-4 mb-4 text-center">
-        <h2>Video del juego</h2>
-        <video src="/assets/Pokemon Yellow Intro.mp4" type="video/mp4" controls poster="/assets/maxresdefault.jpg" class="img-fluid rounded" style="width: 100%;"></video>
-    </div>
-</div> -->
 <div class="row" id="infoCompleta">
     <div class="col-lg-6">
         <div id="imagenJuego" class="mb-4">
@@ -113,8 +62,9 @@
                 <br>
         
               }
-            @if(usuarioLogueado._id != videojuego.idUsuario && logged()){
+            @if(usuarioLogueado._id != videojuego.idUsuario && logged() ){
                 <button type="button" class="btn btn-dark mt-2 btn-lg" (click)="addCarrito()">Iniciar Compra</button>
+
             }
         </div>
     </div>

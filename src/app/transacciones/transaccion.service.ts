@@ -30,6 +30,7 @@ export class TransaccionService{
       .pipe(map((response) => response.transacciones));
   }
 
+
   aceptarTransaccion(idTransaccion: string) {
     return this.#http.post<TransaccionResponse>(`transacciones/${idTransaccion}/true`, {
       okVendedor: true

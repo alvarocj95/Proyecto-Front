@@ -12,3 +12,4 @@ export interface Transaccion{
     estado: 'Pendiente' | 'Aceptada' | 'Rechazada' | 'Finalizada';
 }
 
+
