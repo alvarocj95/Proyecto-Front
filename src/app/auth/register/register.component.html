@@ -23,13 +23,61 @@
                     <input type="file" id="imagen" name="imagen" required="required"  formControlName="imagen"
                     (change)="changeImage($event)" />
                 </div>
-              
+                <div class="form-group">
+                  <label for="estado">Plan</label>
+                  <select class="form-select" id="plan" name="plan" formControlName="plan" (change)="cambiarPlan($event)">
+                    <option value="Básico">Básico</option>
+                    <option value="Premium">Premium</option>
+                    <option value="Profesional">Profesional</option>
+                  </select>
+                </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-dark">Completar registro</button>
                 </div>
+              
             </form>
             <a [routerLink]="['/auth/login']">Ir a login</a>
         </div>
     </div>
  
 </div>
+<div class="row anuncios">
+    <div class="col-md-4">
+      <div class="plan bg-dark text-white p-4">
+        <h2>Plan Básico</h2>
+        <p>Gratis</p>
+        <ul>
+          <li>Publicación de hasta 5 anuncios simultáneos.</li>
+          <li>Acceso a mensajería para comunicarse con otros usuarios.</li>
+          <li>Posibilidad de realizar hasta 10 interacciones por día.</li>
+        </ul>
+        <button class="btn btn-light">Seleccionar</button>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="plan bg-dark text-white p-4">
+        <h2>Plan Premium Mensual</h2>
+        <p>$9.99/mes</p>
+        <ul>
+          <li>Publicación ilimitada de anuncios.</li>
+          <li>Prioridad en los resultados de búsqueda y destacado en la plataforma.</li>
+          <li>Acceso a estadísticas y análisis de rendimiento de los anuncios.</li>
+        </ul>
+        <button class="btn btn-light">Seleccionar</button>
+      </div>
+    </div>
+    
+    <div class="col-md-4 ">
+      <div class="plan bg-dark text-white p-4">
+        <h2>Plan Profesional Mensual</h2>
+        <p>$19.99/mes</p>
+        <ul>
+          <li>Todas las características del Plan Premium Mensual.</li>
+          <li>Descuentos especiales en promociones.</li>
+          <li>Asesoramiento para mejorar la efectividad de los anuncios.</li>
+        </ul>
+        <button class="btn btn-light">Seleccionar</button>
+      </div>
+    </div>
+  </div>

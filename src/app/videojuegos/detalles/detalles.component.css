@@ -48,3 +48,30 @@ a{
 a:hover {
     color: orange;
   }
+
+  .image-container {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .zoom-box {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px; /* Ajusta el tamaño del zoom según tus necesidades */
+    height: 200px; /* Ajusta el tamaño del zoom según tus necesidades */
+    border: 2px solid black;
+    background-color: white;
+    z-index: 1000;
+  }
+  
+  .zoom-box img {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .zoomable:hover + .zoom-box {
+    display: block;
+  }
+  

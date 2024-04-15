@@ -1,7 +1,7 @@
 <div class="row" id="infoCompleta">
-    <div class="col-lg-6">
+    <div class="col-lg-6 divimagen">
         <div id="imagenJuego" class="mb-4">
-            <img [src]="videojuego.imagenPrincipal" alt="Imagen del juego" class="img-fluid rounded">
+            <img [src]="videojuego.imagenPrincipal" alt="Imagen del juego" class="img-fluid rounded imagen">
         </div>
     </div>
     <div class="col-lg-6 bg-light rounded shadow mb-3" id="info">
@@ -66,13 +66,14 @@
                 <button type="button" class="btn btn-dark mt-2 btn-lg" (click)="addCarrito()">Iniciar Compra</button>
 
             }
+            <h2>
+                <a [routerLink]="['/profile/', usuario._id]">Ir al perfil de {{ usuario.nombre }}</a>
+            </h2>
         </div>
     </div>
 </div>
 
-<h2>
-    <a [routerLink]="['/profile/', usuario._id]">Ir al perfil de {{ usuario.nombre }}</a>
-</h2>
+
 <img [src] ="usuario.imagen" alt="">
   
 <div class="row bg-light rounded shadow mt-3">

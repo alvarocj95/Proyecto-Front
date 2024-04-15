@@ -46,5 +46,15 @@ export class ListaComponent implements OnInit{
       this.videojuegos = videojuegos;
     });
   }
+
+  searchVideojuego() {
+    this.route.queryParams.subscribe((params) => {
+      if (params['search']) {
+        console.log(params['search']);
+        this.search = params['search'];
+        this.filterVideojuegos();
+      }
+    });
+  }
   
 }

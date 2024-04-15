@@ -21,6 +21,8 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
 import { Transaccion } from '../transacciones/interfaces/transaccion';
 import { TransaccionService } from '../transacciones/transaccion.service';
 import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-profile',
@@ -33,7 +35,10 @@ import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     CardComponent,
     StarRatingComponent,
     RouterLink,
-    SweetAlert2Module
+    SweetAlert2Module,
+    ReactiveFormsModule,
+    FormsModule
+    
   ],
 })
 export class ProfileComponent implements OnInit {
@@ -49,9 +54,19 @@ export class ProfileComponent implements OnInit {
   #router = inject(Router);
   #transaccionService = inject(TransaccionService);
   transacciones!: Transaccion[];
+  #fb = inject(NonNullableFormBuilder);
+
+  
+  
+
   @ViewChild('confirmDialog') confirmDialog!: SwalComponent;
   @ViewChild('confirmDialog2') confirmDialog2!: SwalComponent;
 
+  saldo = this.#fb.control(1, [Validators.required, Validators.min(1)]);
+
+  form = this.#fb.group({
+    saldo: this.saldo,
+  });
 
 
   ngOnInit(): void {
@@ -114,6 +129,28 @@ export class ProfileComponent implements OnInit {
   logout() {
     this.#authService.Logout();
     this.#router.navigate(['/login']);
+  }
+
+  activeTab: string = 'compras'; // Tab por defecto
+
+  setActiveTab(tab: string): void {
+    this.activeTab = tab;
+  }
+
+  recargarSaldo(){
+    const saldo = this.form.value.saldo;
+    this.#profileService.actualizarSaldo(this.usuario._id, this.saldo.value).subscribe({
+      next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Saldo actualizado',
+        })
+        this.usuario.saldo += this.saldo.value;
+      },
+      error: () => {
+        this.ngOnInit();
+      },
+    })
   }
 
   // aceptarTransaccion(id: string) {

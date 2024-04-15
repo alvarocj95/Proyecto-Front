@@ -1,9 +1,9 @@
 
-<div class="card text-dark h-100">
-  <div class="card-body bg-gradient-gray d-flex flex-column justify-content-between">
+<div class="card text-dark h-100 cardcss" >
+  <div class="card-body  d-flex flex-column justify-content-between" >
     @if(videojuego.imagenPrincipal)
     {
-    <img [src]="videojuego.imagenPrincipal" alt="Imagen del videojuego" class="card-img-top img-fluid rounded imagen"> <!-- Añadir la imagen aquí -->
+    <img [src]="videojuego.imagenPrincipal" alt="Imagen del videojuego" [routerLink]="['/videojuegos/', videojuego._id]" class="card-img-top img-fluid rounded imagen"> <!-- Añadir la imagen aquí -->
 
     }
     <h5 class="card-title align-self-start">{{videojuego.titulo}}</h5>
@@ -26,6 +26,5 @@
 
       }
     </div>
-    <button [routerLink]="['/videojuegos/', videojuego._id]" class="btn btn-secondary align-self-end mt-auto">Ir a detalles</button>
   </div>
 </div>

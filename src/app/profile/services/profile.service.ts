@@ -24,6 +24,10 @@ export class ProfileService{
       rating,
     });
   }
+
+  actualizarSaldo(idUser: string, nuevoSaldo: number): Observable<void> {
+    return this.#http.put<void>(`${this.#usuariosUrl}/${idUser}/saldo`, { nuevoSaldo });
+  }
   
   // mapToUsuario(resultado: any): Usuario {
   //   return {

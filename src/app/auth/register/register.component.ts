@@ -23,12 +23,16 @@ export class RegisterComponent {
   email = this.#fb.control('', [Validators.required, Validators.email]);
   password = this.#fb.control('',[Validators.required, Validators.minLength(4)])
   imagen = this.#fb.control('');
+  plan = this.#fb.control('Básico');
+
 
   formGroup = this.#fb.group({
     nombre: this.nombre,
     email: this.email,
     password: this.password,
-    imagen: this.imagen
+    imagen: this.imagen,
+    plan: this.plan
+
   });
 
   changeImage(event: Event) {
@@ -46,16 +50,22 @@ export class RegisterComponent {
       nombre: this.formGroup.value.nombre,
       email: this.formGroup.value.email,
       password: this.formGroup.value.password,
-      imagen: ''
+      imagen: '',
+      plan: this.formGroup.value.plan
     }
 
     this.#authService.registro(usuario).subscribe({
       next: () => {
-        this.#router.navigate(['/auth']);
+        this.#router.navigate(['/auth/login']);
       },
       error: (error) => {
         console.log(error);
       }
     });
+  }
+
+  cambiarPlan(event: Event) :void{
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.plan.setValue(String(selectedValue));
   }
 }

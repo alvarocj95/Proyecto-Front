@@ -13,3 +13,33 @@
   #email {
     margin-bottom: 20px;
   }
+
+  .contenedor-flexbox {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en varias filas si es necesario */
+    justify-content: space-between; /* Distribuye los elementos de manera uniforme */
+}
+
+.button{
+  margin-right: 15px;
+}
+
+.tabs{
+  margin-bottom: 20px;
+}
+
+#formularioSaldo{
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+#btnSaldo{
+  margin-top: 10px;
+}
+
+.transaction-image {
+  width: 100%;
+  height: auto;
+  max-height: 300px; /* Ajusta el tamaño máximo según tus necesidades */
+  object-fit: cover;
+}

@@ -98,4 +98,6 @@ export class DetallesComponent implements OnInit{
         }
       });
   }
+
+  
 }
