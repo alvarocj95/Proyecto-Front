@@ -10,6 +10,13 @@
     border-radius: 10px;
 }
 
+
+.imagenes{
+    width: 100%;
+    height: auto;
+    max-height: 150px; /* Ajusta el tamaño máximo según tus necesidades */
+    object-fit: cover;
+}
 #info {
     padding: 20px;
 }

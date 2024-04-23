@@ -17,3 +17,27 @@
   transition: 0.5s;
   background-color: #ffffff;
 }
+
+/* Apply specific color based on liked property via nested pseudo-class */
+.fa-heart.like:hover {
+  color: black; /* Override hover color for liked state */
+  cursor: pointer;
+}
+
+.fa-heart.noLike:hover {
+  color: red; /* Keep hover color for noLike state */
+  cursor: pointer;
+}
+
+/* .fa-heart:hover{
+  cursor: pointer;
+
+} */
+
+.like{
+  color: red;
+}
+
+.noLike{
+  color: black;
+}

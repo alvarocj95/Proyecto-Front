@@ -43,3 +43,7 @@
   max-height: 300px; /* Ajusta el tamaño máximo según tus necesidades */
   object-fit: cover;
 }
+
+.form-control {
+  width: 300px;
+}

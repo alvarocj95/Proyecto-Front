@@ -47,6 +47,15 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./profile/profile.routes').then((m) => m.profileroutes),
   },
+  {
+    path: 'likes',
+    title: 'Mi lista de deseos',
+    loadComponent() {
+      return import('./likes/likes.component').then(
+        (m) => m.LikesComponent
+      );
+    },
+  },
   { path: '', pathMatch: 'full', redirectTo: '/auth/login' },
   // ...
   { path: '**', redirectTo: '/auth/login' },

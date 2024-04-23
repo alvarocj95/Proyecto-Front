@@ -153,26 +153,6 @@ export class ProfileComponent implements OnInit {
     })
   }
 
-  // aceptarTransaccion(id: string) {
-  //   this.#transaccionService.aceptarTransaccion(id).subscribe({
-  //     next: () => {
-  //       this.ngOnInit();
-  //     },
-  //     error: () => {
-  //       this.ngOnInit();
-  //     },});
-    
-  // }
-  // rechazarTransaccion(id: string) {
-  //   this.#transaccionService.rechazarTransaccion(id).subscribe({
-  //     next: () => {
-  //       this.ngOnInit();
-  //     },
-  //     error: () => {
-  //       this.ngOnInit();
-  //     },
-  //   })
-  // }
 
   confirmarVenta(id: string) {
     this.confirmDialog2.fire().then((result) => {

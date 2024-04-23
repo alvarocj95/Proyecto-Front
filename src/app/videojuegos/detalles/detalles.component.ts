@@ -9,6 +9,8 @@ import { Transaccion } from '../../transacciones/interfaces/transaccion';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../auth/services/auth.service';
+import { LikesService } from '../../likes/likes.service';
+
 
 @Component({
   selector: 'app-detalles',
@@ -22,6 +24,7 @@ export class DetallesComponent implements OnInit{
   videojuego!: Videojuego;
   #videoJuegoService = inject(VideojuegoService);
   #profileService = inject(ProfileService);
+  #likesService = inject(LikesService);
   usuario!: Usuario;
   usuarioLogueado!: Usuario;
   #transaccionService = inject(TransaccionService);
@@ -29,6 +32,7 @@ export class DetallesComponent implements OnInit{
   #authService = inject(AuthService);
   logged = computed(() => this.#authService.logged());
   pendiente: boolean = false;
+  likes: number = 0;
 
   
 
@@ -54,10 +58,16 @@ export class DetallesComponent implements OnInit{
           console.error("Error al obtener el videojuego:", error);
         }
       });
+
+      this.#likesService.getTotalLikes(this.id).subscribe({
+        next: (likes) => {
+          this.likes = likes;
+        },
+        error: (error) => {
+          console.error("Error al obtener los likes:", error);
+        }
+      });
     }
-
-
-    
   }
   mostrar(){
     console.log("Funciona", this.id);

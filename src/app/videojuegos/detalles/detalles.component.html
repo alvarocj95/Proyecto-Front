@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-4">
                     @if(videojuego.imagenSecundaria != ""){
-                        <img [src]="videojuego.imagenSecundaria" alt="Juego 1" class="img-fluid rounded">
+                        <img [src]="videojuego.imagenSecundaria" alt="Juego 1" class="img-fluid rounded imagenes">
 
                     }
                     @else {
@@ -21,7 +21,7 @@
                 </div>
                 <div class="col-4">
                     @if(videojuego.imagenTerciaria != ""){
-                        <img [src]="videojuego.imagenTerciaria" alt="Juego 1" class="img-fluid rounded">
+                        <img [src]="videojuego.imagenTerciaria" alt="Juego 1" class="img-fluid rounded imagenes">
 
                     }
                     @else {
@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-4">
                     @if(videojuego.imagenCuaternaria != ""){
-                        <img [src]="videojuego.imagenCuaternaria" alt="Juego 1" class="img-fluid rounded">
+                        <img [src]="videojuego.imagenCuaternaria" alt="Juego 1" class="img-fluid rounded imagenes">
 
                     }
                     @else {
@@ -65,16 +65,20 @@
             @if(usuarioLogueado._id != videojuego.idUsuario && logged() ){
                 <button type="button" class="btn btn-dark mt-2 btn-lg" (click)="addCarrito()">Iniciar Compra</button>
 
+
             }
             <h2>
                 <a [routerLink]="['/profile/', usuario._id]">Ir al perfil de {{ usuario.nombre }}</a>
+            
             </h2>
+           
+
         </div>
     </div>
 </div>
 
+<p>{{likes}} likes</p>
 
-<img [src] ="usuario.imagen" alt="">
   
 <div class="row bg-light rounded shadow mt-3">
     <div class="col-12 mt-4 mb-4 text-center">

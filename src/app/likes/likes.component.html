@@ -1,0 +1,8 @@
+    <div class="container mt-4 ">
+        <div class="row">
+            @for (like of likes;  track like._id) {
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+              <app-card [videojuego]="like.idArticulo"></app-card>
+            </div>
+          }
+        </div>

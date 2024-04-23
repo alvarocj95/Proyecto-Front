@@ -33,13 +33,16 @@
             <input class="form-control me-2" type="search" name="search" [(ngModel)]="search" placeholder="Buscar" aria-label="Search">
             <button class="btn btn-outline-success" type="submit" (submit)="searchVideojuego()">Buscar</button>
           </form>
-          <a class="nav-link" href="/carrito">
-            <img src="/assets/carrito.png" [routerLink]="['/carrito']" id="iconoCarrito"alt="" width="40px">
-          </a>
+          @if(logged()){
+            <a class="nav-link" [routerLink]="['/likes']">
+              <img src="/assets/corazon.png" id="iconoCarrito"alt="" width="40px">
+            </a>
+          }
+         
           @if(!logged())
           {
             <a class="nav-link" [routerLink]="['/auth/registro']" [routerLinkActive]="['active']">
-              <img src="/assets/user.png" id="iconoLogin"  alt="" width="40px">
+              <img src="/assets/robot.png" id="iconoLogin"  alt="" width="40px">
             </a>
           }
           @if(logged())
