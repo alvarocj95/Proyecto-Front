@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Observable, map } from "rxjs";
-import { TransaccionResponse, TransaccionesResponse } from "./interfaces/responses";
+import { TransaccionResponse, TransaccionTotal, TransaccionesResponse } from "./interfaces/responses";
 import { Transaccion } from "./interfaces/transaccion";
 
 @Injectable({
@@ -10,11 +10,12 @@ import { Transaccion } from "./interfaces/transaccion";
 export class TransaccionService{
  #http = inject(HttpClient);
  
- nuevaTransaccion(idArticulo: string, idComprador: string, idVendedor: string): Observable<TransaccionResponse> {
+ nuevaTransaccion(idArticulo: string, idComprador: string, idVendedor: string, propuesta: number): Observable<TransaccionResponse> {
     return this.#http.post<TransaccionResponse>(`transacciones`, {
       idArticulo,
       idComprador,
-      idVendedor
+      idVendedor,
+      propuesta
     });
   }
 
@@ -30,6 +31,12 @@ export class TransaccionService{
       .pipe(map((response) => response.transacciones));
   }
 
+  getTotalTransacciones(idArticulo: string): Observable<number> {
+    return this.#http
+      .get<TransaccionTotal>(`transacciones/${idArticulo}/total`)
+      .pipe(map((response) => response.totalTransacciones));
+  }
+
 
   aceptarTransaccion(idTransaccion: string) {
     return this.#http.post<TransaccionResponse>(`transacciones/${idTransaccion}/true`, {
@@ -40,6 +47,12 @@ export class TransaccionService{
   rechazarTransaccion(idTransaccion: string) {
     return this.#http.post<TransaccionResponse>(`transacciones/${idTransaccion}/false`, {
       okVendedor: false
+    });
+  }
+
+  finalizarTransaccion(idTransaccion: string) {
+    return this.#http.post<TransaccionResponse>(`transacciones/${idTransaccion}/finalizar`, {
+      
     });
   }
 }

@@ -85,7 +85,8 @@
                   <p class="card-text">Artículo: {{transaccion.idArticulo.titulo}}</p>
                   <p class="card-text">Fecha: {{transaccion.fecha | date: 'MM/dd/yyyy hh:mm a'}}</p>
                   @if(transaccion.estado == 'Aceptada'){
-                  <star-rating [rating]="usuario.valoracion" (ratingChange)="usuario.valoracion = $event"></star-rating>
+                  <!-- <star-rating [rating]="usuario.valoracion" (ratingChange)="usuario.valoracion = $event"></star-rating> -->
+     
                   }
       
                   @if(transaccion.estado == 'Pendiente')
@@ -142,7 +143,13 @@
                   <p class="card-text">Artículo: {{transaccion.idArticulo.titulo}}</p>
                   <p class="card-text">Fecha: {{transaccion.fecha | date: 'MM/dd/yyyy hh:mm a'}}</p>
                   @if(transaccion.estado == 'Aceptada'){
+                  <span class="badge bg-success">Aceptada</span>
+
                   <star-rating [rating]="usuario.valoracion" (ratingChange)="usuario.valoracion = $event"></star-rating>
+                  <swal #confirmDialog3 title="¿Estás seguro de finalizar esta venta?" text="Este cambio no podrá deshacerse"
+                  icon="question" [showDenyButton]="true" [focusCancel]="true"></swal>
+                  <button type="button" class="btn btn-dark me-2"
+                  (click)="finalizarTransaccion(transaccion._id)">Finalizar</button>
                   }
       
                   @if(transaccion.estado == 'Pendiente')
@@ -153,9 +160,10 @@
                   {
                   <span class="badge bg-danger">Rechazada</span>
                   }
-                  @else if(transaccion.estado == 'Aceptada')
+               
+                  @else if(transaccion.estado == 'Finalizada')
                   {
-                  <span class="badge bg-success">Aceptada</span>
+                  <span class="badge bg-primary">Finalizada</span>
                   }
       
                 </div>

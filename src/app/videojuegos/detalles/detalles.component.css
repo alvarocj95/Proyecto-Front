@@ -82,3 +82,25 @@ a:hover {
     display: block;
   }
   
+  .like {
+    color: red; /* Color por defecto del corazón */
+    font-size: 34px; /* Tamaño del ícono */
+    transition: color 0.3s; /* Suaviza la transición de color */
+  }
+  
+  .hand{
+    font-size: 34px;
+  }
+  
+  p {
+    color: #333; /* Color del texto */
+    font-size: 20px; /* Tamaño del texto */
+    margin-top: 5px; /* Espacio arriba del texto */
+  }
+  
+  .container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  

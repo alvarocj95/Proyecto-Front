@@ -61,6 +61,8 @@ export class ProfileComponent implements OnInit {
 
   @ViewChild('confirmDialog') confirmDialog!: SwalComponent;
   @ViewChild('confirmDialog2') confirmDialog2!: SwalComponent;
+  @ViewChild('confirmDialog3') confirmDialog3!: SwalComponent;
+
 
   saldo = this.#fb.control(1, [Validators.required, Validators.min(1)]);
 
@@ -185,6 +187,19 @@ export class ProfileComponent implements OnInit {
     });
   }
 
- 
-
+  finalizarTransaccion(id: string) {
+    
+    this.confirmDialog3.fire().then((result) => {
+      if (result.isConfirmed) {
+        this.#transaccionService.finalizarTransaccion(id).subscribe({
+          next: () => {
+            this.ngOnInit();
+          },
+          error: () => {
+            this.ngOnInit();
+          },
+        });
+      }
+    });
+  }
 }

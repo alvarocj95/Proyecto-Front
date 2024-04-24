@@ -33,7 +33,7 @@ export class DetallesComponent implements OnInit{
   logged = computed(() => this.#authService.logged());
   pendiente: boolean = false;
   likes: number = 0;
-
+  totalTransacciones: number = 0;
   
 
   ngOnInit(): void {
@@ -67,6 +67,15 @@ export class DetallesComponent implements OnInit{
           console.error("Error al obtener los likes:", error);
         }
       });
+
+      this.#transaccionService.getTotalTransacciones(this.id).subscribe({
+        next: (transacciones) => {
+          this.totalTransacciones = transacciones;
+        },
+        error: (error) => {
+          console.error("Error al obtener las transacciones:", error);
+        }
+      })
     }
   }
   mostrar(){
@@ -89,18 +98,35 @@ export class DetallesComponent implements OnInit{
             }
           })
           if(this.pendiente == false){
-            this.#transaccionService.nuevaTransaccion(this.videojuego._id, this.usuarioLogueado._id, this.usuario._id).subscribe({
-              next: () => {
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Petición realizada correctamente',
-                  text: 'El vendedor se pondrá en contacto contigo',
-                });
+            Swal.fire({
+              title: '¿Cuánto dinero quieres ofrecer?',
+              input: 'number',
+              showCancelButton: true,
+              cancelButtonText: 'Cancelar',
+              confirmButtonText: 'Ofertar',
+              preConfirm: (value) => {
+                if (!value) {
+                  return 'Debes introducir un importe';
+                }
+                return value;
               },
-              error: (error) => {
-                console.error("Error al realizar la transacción:", error);
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.#transaccionService.nuevaTransaccion(this.videojuego._id, this.usuarioLogueado._id, this.usuario._id, result.value).subscribe({
+                  next: () => {
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'Petición realizada correctamente',
+                      text: 'El vendedor se pondrá en contacto contigo',
+                    });
+                  },
+                  error: (error) => {
+                    console.error("Error al realizar la transacción:", error);
+                  }
+                })
               }
             })
+
           }
         },
         error: (error) => {

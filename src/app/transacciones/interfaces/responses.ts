@@ -7,3 +7,7 @@ export interface TransaccionResponse {
 export interface TransaccionesResponse {
     transacciones: Transaccion[];
 }
+
+export interface TransaccionTotal {
+    totalTransacciones: number
+}

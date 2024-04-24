@@ -13,7 +13,6 @@
                 <div class="col-4">
                     @if(videojuego.imagenSecundaria != ""){
                         <img [src]="videojuego.imagenSecundaria" alt="Juego 1" class="img-fluid rounded imagenes">
-
                     }
                     @else {
                         <img src="/assets/defecto.jpg" alt="">
@@ -22,7 +21,6 @@
                 <div class="col-4">
                     @if(videojuego.imagenTerciaria != ""){
                         <img [src]="videojuego.imagenTerciaria" alt="Juego 1" class="img-fluid rounded imagenes">
-
                     }
                     @else {
                         <img src="/assets/defecto.jpg" alt="">
@@ -31,7 +29,6 @@
                 <div class="col-4">
                     @if(videojuego.imagenCuaternaria != ""){
                         <img [src]="videojuego.imagenCuaternaria" alt="Juego 1" class="img-fluid rounded imagenes">
-
                     }
                     @else {
                         <img src="/assets/defecto.jpg" alt="">
@@ -55,31 +52,31 @@
               @if(videojuego.estado == 'Como nuevo'){
                 <span class="badge bg-info">Como nuevo</span>
                 <br>
-        
               }
               @if(videojuego.estado == 'Mal estado'){
                 <span class="badge bg-danger">Mal estado</span>
                 <br>
-        
               }
+              <div class="container mt-4">
+                <i class="fa-regular fa-heart like"></i>
+                <h4>{{ likes }} guardados en favoritos</h4>
+            </div>
+            <div class="container mt-4">
+                <i class="fa-solid fa-handshake hand"></i>
+                <h4>{{totalTransacciones}} veces contactado</h4>
+            </div>
             @if(usuarioLogueado._id != videojuego.idUsuario && logged() ){
-                <button type="button" class="btn btn-dark mt-2 btn-lg" (click)="addCarrito()">Iniciar Compra</button>
-
-
+                <button type="button" class="btn btn-dark mt-4 btn-lg" (click)="addCarrito()">Iniciar Compra</button>
             }
-            <h2>
-                <a [routerLink]="['/profile/', usuario._id]">Ir al perfil de {{ usuario.nombre }}</a>
-            
-            </h2>
-           
-
         </div>
     </div>
 </div>
+<h2>
+    <a [routerLink]="['/profile/', usuario._id]">Ir al perfil de {{ usuario.nombre }}</a>
+</h2>
 
-<p>{{likes}} likes</p>
 
-  
+
 <div class="row bg-light rounded shadow mt-3">
     <div class="col-12 mt-4 mb-4 text-center">
         <p>Hola {{usuarioLogueado.nombre}},</p>
@@ -103,6 +100,5 @@
             </div>
             <button type="submit" class="btn btn-dark btn-block mt-3 mb-3">Enviar mensaje</button>
         </form>
-        
     </div>
 </div>

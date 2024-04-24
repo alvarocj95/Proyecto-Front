@@ -1,3 +1,98 @@
 #contacto{
     margin-top: 40px;
 }
+
+.fa-solid, .fa-brands{
+    margin-right: 10px;
+    font-size: 30px;
+}
+
+.fa-solid:hover, .fa-brands:hover{
+    color: orange;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background: linear-gradient(45deg, rgba(66, 183, 245, 0.8) 0%, rgba(66, 245, 189, 0.4) 100%);
+    color: rgba(0, 0, 0, 0.6);
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    line-height: 1.6em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.form {
+    position: relative;
+    width: 100%;
+    /* Modificado para que ocupe todo el ancho */
+    border-radius: 4px;
+    overflow: hidden;
+    padding: 0;
+    /* Elimina los márgenes laterales */
+}
+
+
+
+
+.form-group label {
+    display: block;
+    margin: 0 0 10px;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: .2em;
+}
+
+
+
+.form-group input, textarea{
+    outline: none;
+    display: block;
+    background: rgba(0, 0, 0, 0.1);
+    width: 100%;
+    border: 0;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 12px 20px;
+    color: rgba(0, 0, 0, 0.6);
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 500;
+    line-height: inherit;
+    -webkit-transition: 0.3s ease;
+    transition: 0.3s ease;
+}
+
+.form-group button {
+    outline: none;
+    width: 100%;
+    border: 0;
+    border-radius: 4px;
+    padding: 12px 20px;
+    color: #FFFFFF;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 500;
+    line-height: inherit;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.form-group .submit {
+    background-color: #000; /* Black background color for submit button */
+    border-color: #2e2e2e; /* Slightly darker border color */
+    color: #fff; /* White text color */
+  }
+  
+  .form-group textarea {
+    background: rgba(0, 0, 0, 0.1); /* Match other inputs' background */
+    
+  }
+
