@@ -106,7 +106,14 @@ export class DetallesComponent implements OnInit{
               confirmButtonText: 'Ofertar',
               preConfirm: (value) => {
                 if (!value) {
-                  return 'Debes introducir un importe';
+                  return Swal.showValidationMessage('Debes introducir un importe');
+                }
+                if (value <= 0) {
+                  return Swal.showValidationMessage('El importe debe ser mayor que 0');
+                }
+                if (value > this.usuarioLogueado.saldo) {
+                  return Swal.showValidationMessage('No tienes suficiente saldo en el monedero, solo tienes ' + this.usuarioLogueado.saldo + '€');
+                  
                 }
                 return value;
               },

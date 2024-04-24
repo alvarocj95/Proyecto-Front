@@ -25,6 +25,11 @@ export class TransaccionService{
 //       .pipe(map((response) => response.transacciones));
 //   }
 
+ getTodasTransacciones(): Observable<Transaccion[]> {
+   return this.#http
+     .get<TransaccionesResponse>(`transacciones`)
+     .pipe(map((response) => response.transacciones));
+ }
   getTransacciones(idUsuario: string): Observable<Transaccion[]> {
     return this.#http
       .get<TransaccionesResponse>(`transacciones/${idUsuario}`)
