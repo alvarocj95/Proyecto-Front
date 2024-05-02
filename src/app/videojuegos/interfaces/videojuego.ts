@@ -11,6 +11,7 @@ export interface Videojuego {
     imagenSecundaria?: string;
     imagenTerciaria?: string;
     imagenCuaternaria?: string;
+    vendido?: boolean;
 
 }
 

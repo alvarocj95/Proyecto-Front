@@ -89,7 +89,7 @@ export class DetallesComponent implements OnInit{
         next: (transacciones) => {
           this.transacciones = transacciones;
           this.transacciones.forEach((transaccion) => {
-            if(transaccion.idArticulo._id == this.videojuego._id && transaccion.idComprador._id == this.usuarioLogueado._id ){
+            if(transaccion.idArticulo?._id == this.videojuego._id && transaccion.idComprador._id == this.usuarioLogueado._id ){
               this.pendiente = true;
               Swal.fire({
                 icon: 'warning',

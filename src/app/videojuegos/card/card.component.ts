@@ -30,52 +30,71 @@ export class CardComponent implements OnInit{
   liked: boolean = false;
   #router = inject(Router);
 
+  // nuevoLike(){
+  //   this.#likesService.nuevoLike(this.videojuego._id, this.usuarioLogueado._id).subscribe({
+  //     next: (like) => {
+  //       console.log(like);
+  //       this.ngOnInit();
+  //     }
+  //   })
+  // }
+
+  // quitarLike(){
+  //   this.#likesService.borrarLike(this.videojuego._id, this.usuarioLogueado._id).subscribe({
+  //     next: (like) => {
+  //       console.log(like);
+  //       // Swal.fire({
+  //       //   icon: 'success',
+  //       //   title: 'Se ha quitado el like',
+  //       //   showConfirmButton: false,
+  //       //   timer: 1500
+  //       // })
+  //       this.liked = false;
+  //       this.ngOnInit();
+  //     }
+  //   })
+  // }
   nuevoLike(){
-    this.#likesService.nuevoLike(this.videojuego._id, this.usuarioLogueado._id).subscribe({
-      next: (like) => {
-        console.log(like);
-        this.ngOnInit();
-      }
-    })
+    if (this.videojuego && this.usuarioLogueado) {
+      this.#likesService.nuevoLike(this.videojuego._id, this.usuarioLogueado._id).subscribe({
+        next: (like) => {
+          console.log(like);
+          this.ngOnInit();
+        }
+      });
+    }
   }
-
+  
   quitarLike(){
-    this.#likesService.borrarLike(this.videojuego._id, this.usuarioLogueado._id).subscribe({
-      next: (like) => {
-        console.log(like);
-        // Swal.fire({
-        //   icon: 'success',
-        //   title: 'Se ha quitado el like',
-        //   showConfirmButton: false,
-        //   timer: 1500
-        // })
-        this.liked = false;
-        this.ngOnInit();
-      }
-    })
+    if (this.videojuego && this.usuarioLogueado) {
+      this.#likesService.borrarLike(this.videojuego._id, this.usuarioLogueado._id).subscribe({
+        next: (like) => {
+          console.log(like);
+          this.liked = false;
+          this.ngOnInit();
+        }
+      });
+    }
   }
-
+  
   ngOnInit(): void {
-    this.#profileService.getPerfil(this.videojuego.idUsuario).subscribe({
-      next: (user) => {
-        this.usuario = user.resultado;
-      }
-    })
-
     this.#profileService.getMiPerfil().subscribe({
       next: (user) => {
-        this.usuarioLogueado = user.resultado;
-        this.#likesService.getLikes(this.usuarioLogueado._id).subscribe({
-          next: (likes) => {
-            this.likes = likes;
-            this.likes.forEach(like => {
-              if (like.idArticulo._id === this.videojuego._id) {
-                this.liked = true;
-              }
-            })
-          }
-        })
+        if (user && user.resultado) {
+          this.usuarioLogueado = user.resultado;
+          this.#likesService.getLikes(this.usuarioLogueado?._id).subscribe({
+            next: (likes) => {
+              this.likes = likes;
+              this.likes.forEach(like => {
+                if (like.idArticulo && like.idArticulo._id === this.videojuego._id) {
+                  this.liked = true;
+                }
+              });
+            }
+          });
+        }
       }
-    })
+    });
   }
+  
 }

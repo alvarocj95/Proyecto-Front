@@ -4,7 +4,11 @@ export const routes: Routes = [
   {
     path: 'auth', 
     title: 'Login',
-    loadChildren: () => import('./auth/auth.routes').then(m => m.routesAuth)
+    loadChildren() {
+      return import('./auth/auth.routes').then(
+        (m) => m.routesAuth
+      );
+    },
   },
   {
     path: 'videojuegos',

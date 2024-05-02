@@ -21,13 +21,24 @@ export class LikesComponent implements OnInit{
   ngOnInit(): void {
     this.#profileService.getMiPerfil().subscribe({
       next: (user) => {
-        this.usuario = user.resultado;
-        this.#likesService.getLikes(this.usuario._id).subscribe({
-          next: (likes) => {
-            this.likes = likes;
+          if (user && user.resultado) {
+              this.usuario = user.resultado;
+              if (this.usuario._id) {
+                  this.#likesService.getLikes(this.usuario._id).subscribe({
+                      next: (likes) => {
+                          this.likes = likes;
+                      }
+                  });
+              } else {
+                  console.error("ID del usuario no disponible.");
+              }
+          } else {
+              console.error("Perfil de usuario no recibido.");
           }
-        })
+      },
+      error: (err) => {
+          console.error("Error al obtener el perfil del usuario:", err);
       }
-    })
+  });
   }
 }

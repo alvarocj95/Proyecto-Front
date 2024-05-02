@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UsuarioRegistro } from '../interfaces/usuarios';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
@@ -56,7 +57,12 @@ export class RegisterComponent {
 
     this.#authService.registro(usuario).subscribe({
       next: () => {
-        this.#router.navigate(['/auth/login']);
+        Swal.fire({
+          icon: 'success',
+          title: 'Se ha registrado correctamente',
+          showConfirmButton: false,
+          
+        })
       },
       error: (error) => {
         console.log(error);

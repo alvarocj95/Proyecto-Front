@@ -41,6 +41,7 @@ export class ConsolasComponent {
   loadAllVideojuegos() {
     this.#videoJuegoService.getVideojuegos().subscribe((videojuegos) => {
       this.videojuegos = videojuegos;
+      this.videojuegos.reverse();
     });
   }
 }

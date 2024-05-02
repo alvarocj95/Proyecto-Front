@@ -35,7 +35,17 @@ export class TransaccionService{
       .get<TransaccionesResponse>(`transacciones/${idUsuario}`)
       .pipe(map((response) => response.transacciones));
   }
-
+  getTransaccionesFinalizadas(idUsuario: string): Observable<Transaccion[]> {
+    return this.#http
+      .get<TransaccionesResponse>(`transacciones/${idUsuario}/finalizadas`)
+      .pipe(map((response) => response.transacciones));
+  
+  }
+  getArticuloTransaccion(idArticulo: string): Observable<Transaccion> {
+    return this.#http
+      .get<TransaccionResponse>(`transacciones/${idArticulo}/articulo`)
+      .pipe(map((response) => response.transaccion));
+  }
   getTotalTransacciones(idArticulo: string): Observable<number> {
     return this.#http
       .get<TransaccionTotal>(`transacciones/${idArticulo}/total`)
@@ -55,9 +65,8 @@ export class TransaccionService{
     });
   }
 
-  finalizarTransaccion(idTransaccion: string) {
-    return this.#http.post<TransaccionResponse>(`transacciones/${idTransaccion}/finalizar`, {
-      
+  finalizarTransaccion(idTransaccion: string, idComprador: string, idVendedor: string) {
+    return this.#http.post<TransaccionResponse>(`transacciones/${idTransaccion}/${idComprador}/${idVendedor}/finalizar`, {
     });
   }
 }

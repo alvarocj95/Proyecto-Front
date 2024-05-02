@@ -20,7 +20,7 @@
           <span class="badge bg-danger">Mal estado</span>
         }
       </div>
-      @if(usuarioLogueado._id != videojuego.idUsuario && logged()){
+      @if(usuarioLogueado?._id != videojuego.idUsuario && logged()){
         <div>
           <i class="fa-regular fa-heart fa-2x me-2" (click)="liked ? quitarLike() : nuevoLike()" [ngClass]="{
             'like': liked === true,

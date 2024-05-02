@@ -10,6 +10,8 @@ export interface Transaccion{
     okComprador: boolean;
     okVendedor: boolean;
     estado: 'Pendiente' | 'Aceptada' | 'Rechazada' | 'Finalizada';
+    finalComprador: Usuario;
+    finalVendedor: Usuario;
 }
 
 

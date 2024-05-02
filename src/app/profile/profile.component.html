@@ -6,15 +6,15 @@
       </div>
     </div>
     <div class="col-9" id="profileInfo">
-      <h4 id="name">{{usuario.nombre}}</h4>
+      <h4 id="name">{{usuario?.nombre}}</h4>
       <h4 id="email">
         <small class="text-muted">{{usuario.email}}</small>
       </h4>
       @if(logged() && !id)
       {
-        <h4>
-          <small class="text-muted">{{usuario.saldo}} €</small>
-        </h4>
+      <h4>
+        <small class="text-muted">{{usuario.saldo}} €</small>
+      </h4>
 
       }
       <star-rating [rating]="usuario.valoracion"></star-rating>
@@ -23,20 +23,20 @@
     </div>
     @if(logged() && !id)
     {
-      <div class="container">
-        <div id="formularioSaldo">
-          <h2>Recargar Saldo</h2>
-          <form (ngSubmit)="recargarSaldo()" [formGroup]="form">
-            <div class="form-group">
-              <label for="amount">Cantidad:</label>
-              <input type="number" min="1" class="form-control" id="saldo" name="saldo" formControlName="saldo" required>
-            </div>
-            <button type="submit" class="btn btn-dark mt-2">Recargar</button>
-          </form>
-        </div>
+    <div class="container">
+      <div id="formularioSaldo">
+        <h2>Recargar Saldo</h2>
+        <form (ngSubmit)="recargarSaldo()" [formGroup]="form">
+          <div class="form-group">
+            <label for="amount">Cantidad:</label>
+            <input type="number" min="1" class="form-control" id="saldo" name="saldo" formControlName="saldo" required>
+          </div>
+          <button type="submit" class="btn btn-dark mt-2">Recargar</button>
+        </form>
       </div>
-      
-      
+    </div>
+
+
     <a class="btn btn-outline-danger" [routerLink]="['/profile/me']" (click)="logout()">Cerrar sesión</a>
     }
   </div>
@@ -45,7 +45,7 @@
     {
     @if(id)
     {
-    <h1>Videojuegos de {{usuario.nombre}}</h1>
+    <h1>Videojuegos de {{usuario?.nombre}}</h1>
     }
     @else {
     <h1>Mis videojuegos</h1>
@@ -59,130 +59,179 @@
     </div>
     }
   </div>
- 
+
 
 
   @if(logged() && !id)
   {
-    <div class="tabs">
-      <button (click)="setActiveTab('compras')" class="btn btn-outline-dark me-2" [ngClass]="{ 'active': activeTab === 'compras' }">Mis Compras</button>
-      <button (click)="setActiveTab('ventas')" class="btn btn-outline-dark" [ngClass]="{ 'active': activeTab === 'ventas' }">Mis Ventas</button>
+  <div class="tabs">
+    <button (click)="setActiveTab('compras')" class="btn btn-outline-dark me-2"
+      [ngClass]="{ 'active': activeTab === 'compras' }">Mis Compras</button>
+    <button (click)="setActiveTab('ventas')" class="btn btn-outline-dark"
+      [ngClass]="{ 'active': activeTab === 'ventas' }">Mis Ventas</button>
+    <button (click)="setActiveTab('finalizadas')" class="btn btn-outline-dark"
+      [ngClass]="{ 'active': activeTab === 'finalizadas' }">Finalizadas</button>
+
+  </div>
+  <div class="tab-content">
+    <div *ngIf="activeTab === 'finalizadas'">
+      <h1>Finalizadas</h1>
+      <div class="container-fluid">
+        @for (transaccion of transaccionesFinalizadas; track transaccion._id)
+        {
+        @if(transaccion.finalVendedor._id == usuario._id)
+        {
+        <div class="row my-3">
+          <div class="col-md-8">
+            <div class="card h-100">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Detalles de la transacción</h5>
+                <p class="card-text">Comprador: {{transaccion.idComprador.nombre}}</p>
+                <p class="card-text">Artículo: {{transaccion.idArticulo.titulo}}</p>
+                <p class="card-text">Fecha: {{transaccion.fecha | date: 'MM/dd/yyyy hh:mm a'}}</p>
+
+                <span class="badge bg-info">Juego vendido</span>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <img [src]="transaccion.idArticulo.imagenPrincipal" alt="Imagen del videojuego"
+              class="img-fluid rounded transaction-image">
+          </div>
+        </div>
+        }
+        @else if(transaccion.finalComprador._id == usuario._id){
+        <div class="row my-3">
+          <div class="col-md-8">
+            <div class="card h-100">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Detalles de la transacción</h5>
+                <p class="card-text">Vendedor: {{transaccion.idVendedor.nombre}}</p>
+                <p class="card-text">Artículo: {{transaccion.idArticulo.titulo}}</p>
+                <p class="card-text">Fecha: {{transaccion.fecha | date: 'MM/dd/yyyy hh:mm a'}}</p>
+
+                <span class="badge bg-info">Juego comprado</span>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <img [src]="transaccion.idArticulo.imagenPrincipal" alt="Imagen del videojuego"
+              class="img-fluid rounded transaction-image">
+          </div>
+        </div>
+        }
+        }
+      </div>
     </div>
-    <div class="tab-content">
-      <div *ngIf="activeTab === 'ventas'">
-        <h1>Mis ventas</h1>
-        <div class="container-fluid">
-          @for (transaccion of transacciones; track transaccion._id)
-          {
-          @if(transaccion.idVendedor._id == usuario._id)
-          {
-          <div class="row my-3">
-            <div class="col-md-8">
-              <div class="card h-100">
-                <div class="card-body d-flex flex-column">
-                  <h5 class="card-title">Detalles de la transacción</h5>
-                  <p class="card-text">Vendedor: {{transaccion.idVendedor.nombre}}</p>
-                  <p class="card-text">Artículo: {{transaccion.idArticulo.titulo}}</p>
-                  <p class="card-text">Fecha: {{transaccion.fecha | date: 'MM/dd/yyyy hh:mm a'}}</p>
-                  @if(transaccion.estado == 'Aceptada'){
-                  <!-- <star-rating [rating]="usuario.valoracion" (ratingChange)="usuario.valoracion = $event"></star-rating> -->
-     
-                  }
-      
-                  @if(transaccion.estado == 'Pendiente')
-                  {
-                  <span class="badge bg-warning">Pendiente</span>
-                  }
-                  @else if(transaccion.estado == 'Rechazada')
-                  {
-                  <span class="badge bg-danger">Rechazada</span>
-                  }
-                  @else if(transaccion.estado == 'Aceptada')
-                  {
-                  <span class="badge bg-success">Aceptada</span>
-                  }
-                  @if(transaccion.idVendedor._id == usuario._id && transaccion.estado != 'Aceptada' && transaccion.estado !=
-                  'Rechazada')
-                  {
-                  <swal #confirmDialog title="¿Estás seguro de rechazar esta venta?" text="Este cambio no podrá deshacerse"
-                    icon="question" [showDenyButton]="true" [focusCancel]="true"></swal>
-      
-                  <swal #confirmDialog2 title="¿Estás seguro de aceptar esta venta?" text="Este cambio no podrá deshacerse"
-                    icon="question" [showDenyButton]="true" [focusCancel]="true"></swal>
-                  <div class="mt-3">
-                    <button type="button" class="btn btn-dark me-2"
-                      (click)="confirmarRechazo(transaccion._id)">Rechazar</button>
-      
-                    <button type="button" class="btn btn-dark" (click)="confirmarVenta(transaccion._id)">Aceptar</button>
-                  </div>
-                  }
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <img [src]="transaccion.idArticulo.imagenPrincipal" alt="Imagen del videojuego" class="img-fluid rounded transaction-image">
-            </div>
-          </div>
-          }
-          }
-        </div>
-      </div>
-      <div *ngIf="activeTab === 'compras'">
-        <h1>Mis compras</h1>
-        <div class="container-fluid">
-          @for (transaccion of transacciones; track transaccion._id)
-          {
-          @if(transaccion.idComprador._id == usuario._id)
-          {
-          <div class="row my-3">
-            <div class="col-md-8">
-              <div class="card h-100">
-                <div class="card-body d-flex flex-column">
-                  <h5 class="card-title">Detalles de la transacción</h5>
-                  <p class="card-text">Vendedor: {{transaccion.idVendedor.nombre}}</p>
-                  <p class="card-text">Artículo: {{transaccion.idArticulo.titulo}}</p>
-                  <p class="card-text">Fecha: {{transaccion.fecha | date: 'MM/dd/yyyy hh:mm a'}}</p>
-                  @if(transaccion.estado == 'Aceptada'){
-                  <span class="badge bg-success">Aceptada</span>
+    <div *ngIf="activeTab === 'ventas'">
+      <h1>Mis ventas</h1>
+      <div class="container-fluid">
+        @for (transaccion of transacciones; track transaccion._id)
+        {
+        @if(transaccion.idVendedor._id == usuario._id && transaccion.idArticulo?.vendido == false)
+        {
+        <div class="row my-3">
+          <div class="col-md-8">
+            <div class="card h-100">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Detalles de la transacción</h5>
+                <p class="card-text">Comprador: {{transaccion.idComprador.nombre}}</p>
+                <p class="card-text">Artículo: {{transaccion.idArticulo.titulo}}</p>
+                <p class="card-text">Fecha: {{transaccion.fecha | date: 'MM/dd/yyyy hh:mm a'}}</p>
 
-                  <star-rating [rating]="usuario.valoracion" (ratingChange)="usuario.valoracion = $event"></star-rating>
-                  <swal #confirmDialog3 title="¿Estás seguro de finalizar esta venta?" text="Este cambio no podrá deshacerse"
-                  icon="question" [showDenyButton]="true" [focusCancel]="true"></swal>
+                @if(transaccion.estado == 'Pendiente')
+                {
+                <span class="badge bg-warning">Pendiente</span>
+
+                <swal #confirmDialog title="¿Estás seguro de rechazar esta venta?"
+                  text="Este cambio no podrá deshacerse" icon="question" [showDenyButton]="true" [focusCancel]="true">
+                </swal>
+
+                <swal #confirmDialog2 title="¿Estás seguro de aceptar esta venta?"
+                  text="Este cambio no podrá deshacerse" icon="question" [showDenyButton]="true" [focusCancel]="true">
+                </swal>
+                <div class="mt-3">
                   <button type="button" class="btn btn-dark me-2"
-                  (click)="finalizarTransaccion(transaccion._id)">Finalizar</button>
-                  }
-      
-                  @if(transaccion.estado == 'Pendiente')
-                  {
-                  <span class="badge bg-warning">Pendiente</span>
-                  }
-                  @else if(transaccion.estado == 'Rechazada')
-                  {
-                  <span class="badge bg-danger">Rechazada</span>
-                  }
-               
-                  @else if(transaccion.estado == 'Finalizada')
-                  {
-                  <span class="badge bg-primary">Finalizada</span>
-                  }
-      
+                    (click)="confirmarRechazo(transaccion._id)">Rechazar</button>
+
+                  <button type="button" class="btn btn-dark" (click)="confirmarVenta(transaccion._id)">Aceptar</button>
                 </div>
+                }
+                @else if(transaccion.estado == 'Rechazada')
+                {
+                <span class="badge bg-danger">Rechazada</span>
+                }
+                @else if(transaccion.estado == 'Aceptada')
+                {
+                <span class="badge bg-success">Aceptada</span>
+                }
               </div>
             </div>
-            <div class="col-md-4">
-              <img [src]="transaccion.idArticulo.imagenPrincipal" alt="Imagen del videojuego" class="img-fluid rounded transaction-image">
+          </div>
+          <div class="col-md-4">
+            <img [src]="transaccion.idArticulo.imagenPrincipal" alt="Imagen del videojuego"
+              class="img-fluid rounded transaction-image">
+          </div>
+        </div>
+        }
+        }
+      </div>
+    </div>
+    <div *ngIf="activeTab === 'compras'">
+      <h1>Mis compras</h1>
+      <div class="container-fluid">
+        @for (transaccion of transacciones; track transaccion._id)
+        {
+        @if(transaccion.idComprador._id == usuario._id && transaccion.idArticulo?.vendido == false)
+        {
+        <div class="row my-3">
+          <div class="col-md-8">
+            <div class="card h-100">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Detalles de la transacción</h5>
+                <p class="card-text">Vendedor: {{transaccion.idVendedor.nombre}}</p>
+                <p class="card-text">Artículo: {{transaccion.idArticulo.titulo}}</p>
+                <p class="card-text">Fecha: {{transaccion.fecha | date: 'MM/dd/yyyy hh:mm a'}}</p>
+
+                @if(transaccion.estado == 'Pendiente')
+                {
+                <span class="badge bg-warning">Pendiente</span>
+                }
+
+                @else if(transaccion.estado == 'Rechazada')
+                {
+                <span class="badge bg-danger">Rechazada</span>
+                }
+                @else if(transaccion.estado == 'Aceptada'){
+                <span class="badge bg-success">Aceptada</span>
+
+                <swal #confirmDialog3 title="¿Estás seguro de finalizar esta venta?"
+                  text="Este cambio no podrá deshacerse" icon="question" [showDenyButton]="true" [focusCancel]="true">
+                </swal>
+                <button type="button" class="btn btn-dark me-2 mt-3"
+                  (click)="finalizarTransaccion(transaccion._id)">Finalizar</button>
+                }
+
+
+              </div>
             </div>
           </div>
-          }
-          }
+          <div class="col-md-4">
+            <img [src]="transaccion.idArticulo.imagenPrincipal" alt="Imagen del videojuego"
+              class="img-fluid rounded transaction-image">
+          </div>
         </div>
-  
+        }
+        }
       </div>
-  
-      </div>     
+
+    </div>
+
+
+
+  </div>
   }
-
-
-
 
 </div>

@@ -34,8 +34,13 @@ export class VideojuegoService {
 
   getVideojuegosJugador(id: string): Observable<Videojuego[]> {
     return this.#http
-      .get<VideojuegosResponse>(`${this.#videoJuegoUrl}/${id}/jugador`)    //${id}`)
+      .get<VideojuegosResponse>(`${this.#videoJuegoUrl}/${id}/jugador`)
       .pipe(map((response) => response.videojuegos));
   }
 
+  juegoVendido(idJuego: string) {
+    return this.#http.post<VideojuegoResponse>(`videojuegos/${idJuego}/vendido`, {
+      vendido: true
+    });
+  }
 }

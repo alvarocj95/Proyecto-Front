@@ -47,3 +47,7 @@
 .form-control {
   width: 300px;
 }
+
+.vendido{
+  background-color: red;
+}

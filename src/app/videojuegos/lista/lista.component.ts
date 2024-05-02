@@ -50,7 +50,7 @@ export class ListaComponent implements OnInit{
   loadAllVideojuegos() {
     this.#videoJuegoService.getVideojuegos().subscribe((videojuegos) => {
       this.videojuegos = videojuegos;
-      
+      this.videojuegos.reverse();
     
     });
   }

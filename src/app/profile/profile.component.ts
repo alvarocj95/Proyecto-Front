@@ -54,6 +54,8 @@ export class ProfileComponent implements OnInit {
   #router = inject(Router);
   #transaccionService = inject(TransaccionService);
   transacciones!: Transaccion[];
+  transaccionesFinalizadas!: Transaccion[];
+  transaccionArticulo!: Transaccion;
   #fb = inject(NonNullableFormBuilder);
 
   
@@ -112,6 +114,14 @@ export class ProfileComponent implements OnInit {
                 console.error('Error al obtener las transacciones:', error);
               },
             });
+            this.#transaccionService.getTransaccionesFinalizadas(this.usuario._id).subscribe({
+              next: (transacciones) => {
+                this.transaccionesFinalizadas = transacciones;
+              },
+              error: (error) => {
+                console.error('Error al obtener las transacciones:', error);
+              },
+            })
         },
         error: (error) => {
           console.error('Error al obtener mi perfil:', error);
@@ -133,7 +143,7 @@ export class ProfileComponent implements OnInit {
     this.#router.navigate(['/login']);
   }
 
-  activeTab: string = 'compras'; // Tab por defecto
+  activeTab: string = 'compras'; 
 
   setActiveTab(tab: string): void {
     this.activeTab = tab;
@@ -187,19 +197,79 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  finalizarTransaccion(id: string) {
+  // finalizarTransaccion(id: string) {
     
+  //   this.confirmDialog3.fire().then((result) => {
+  //     if (result.isConfirmed) {
+  //       this.#transaccionService.getArticuloTransaccion(id).subscribe({
+  //         next: (articulo) => {
+  //           this.transaccionArticulo = articulo;
+            
+  //           this.#videojuegoService.juegoVendido(this.transaccionArticulo.idArticulo._id).subscribe({
+  //             next: () => {
+  //               this.ngOnInit();
+  //             },
+  //             error: () => {
+  //               this.ngOnInit();
+  //             },
+  //           })
+  //         },
+  //       })
+  //       this.#transaccionService.finalizarTransaccion(id, this.transaccionArticulo.idComprador._id, this.transaccionArticulo.idVendedor._id).subscribe({
+  //         next: () => {
+  //           this.ngOnInit();
+  //         },
+  //         error: () => {
+  //           this.ngOnInit();
+  //         },
+  //       });
+        
+  //     }
+  //   });
+  // }
+  finalizarTransaccion(id: string) {
     this.confirmDialog3.fire().then((result) => {
       if (result.isConfirmed) {
-        this.#transaccionService.finalizarTransaccion(id).subscribe({
-          next: () => {
-            this.ngOnInit();
-          },
-          error: () => {
-            this.ngOnInit();
-          },
-        });
+        // Fetch transaction article first
+        this.#transaccionService.getArticuloTransaccion(id)
+          .subscribe({
+            next: (articulo) => {
+              this.transaccionArticulo = articulo;
+  
+              // Use the fetched data only after successful retrieval
+              this.#transaccionService.finalizarTransaccion(
+                id,
+                this.transaccionArticulo.idComprador._id,
+                this.transaccionArticulo.idVendedor._id
+              )
+                .subscribe({
+                  next: () => {
+                    // Transaction finalized successfully
+                    this.#videojuegoService.juegoVendido(this.transaccionArticulo.idArticulo._id)
+                    .subscribe({
+                      next: () => {
+                        // Game marked as sold successfully
+                        this.ngOnInit();
+                      },
+                      error: (error) => {
+                        console.error('Error marking game as sold:', error);
+                        // Handle error appropriately
+                      },
+                    });
+                  },
+                  error: (error) => {
+                    console.error('Error finalizing transaction:', error);
+                    // Handle error appropriately
+                  },
+                });           
+            },
+            error: (error) => {
+              console.error('Error fetching transaction article:', error);
+              // Handle error appropriately (e.g., display error message to user)
+            },
+          });
       }
     });
   }
+  
 }
