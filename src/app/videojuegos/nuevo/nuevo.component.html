@@ -35,7 +35,7 @@
             </div>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group mt-3">
           <label for="estado">Estado</label>
           <select class="form-select" id="estado" name="estado" formControlName="estado" (change)="cambiarEstado($event)">
             <option value="Precintado">Precintado</option>
@@ -51,6 +51,27 @@
             <option value="Juego">Juego</option>
           </select>
         </div>
+        <div class="form-group">
+          <label for="compania">Compañia</label>
+          <select class="form-select" id="compania" name="compania" formControlName="compania" (change)="cambiarCompania($event)">
+            <option value="Nintendo">Nintendo</option>
+            <option value="PlayStation">PlayStation</option>
+            <option value="Xbox">Xbox</option>
+            <option value="PC">PC</option>
+            <option value="Otros">Otros</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="plataforma">Plataforma:</label>
+          <select class="form-select" formControlName="plataforma" (change)="cambiarPlataforma($event)">
+            @for(console of consoles[compania.value]; track console)
+            {
+              <option value="{{console}}" selected>{{console}}</option>
+            }
+          </select>
+        </div>
+        <p>{{this.plataforma.value}}</p>
+        <p>{{this.compania.value}}</p>
         <div class="form-group">
           <label for="imagenPrincipal">Imagen Principal</label>
           <input type="file" class="form-control" id="imagenPrincipal" name="imagenPrincipal"

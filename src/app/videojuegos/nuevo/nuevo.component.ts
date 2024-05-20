@@ -30,6 +30,17 @@ export class NuevoComponent implements OnInit{
   precio = this.#fb.control(0);
   estado = this.#fb.control('Precintado');
   tipo = this.#fb.control('Consola');
+  compania = this.#fb.control('Nintendo');
+  plataforma = this.#fb.control('Switch');
+
+  consoles: { [key: string]: string[] } = {
+    Nintendo: ['Switch', 'Wii U', '3DS', 'GameCube', 'N64', 'NES', 'GBA', 'GBC', 'GB'],
+    PlayStation: ['PS5', 'PS4', 'PS3', 'PS2', 'PS1', 'PSP', 'PSVita'],
+    Xbox: ['Series X/S', 'One', '360', 'Original'],
+    PC: ['Windows', 'Mac', 'Linux'],
+    Otros: ['SEGA', 'Atari', 'Neo Geo']
+  };
+
   imagen = this.#fb.control('');
   imagen2 = this.#fb.control('');
   imagen3 = this.#fb.control('');
@@ -39,15 +50,18 @@ export class NuevoComponent implements OnInit{
   image3Base64 : string = '';
   image4Base64 : string = '';
 
+  
 
-
+  
   form = this.#fb.group({
     titulo: this.titulo,
     descripcion: this.descripcion,
     lanzamiento: this.lanzamiento,
     precio: this.precio,
     estado: this.estado,
-    tipo: this.tipo
+    tipo: this.tipo,
+    compania: this.compania,
+    plataforma: this.plataforma
   },
     {validators: this.formRequired}
   );
@@ -70,9 +84,11 @@ export class NuevoComponent implements OnInit{
     const precio = c.get('precio')?.value;
     const estado = c.get('estado')?.value;
     const tipo = c.get('tipo')?.value;
+    const compania = c.get('compania')?.value;
+    
     
 
-    if (!titulo && !descripcion && !lanzamiento && !precio && !estado && !tipo) {
+    if (!titulo && !descripcion && !lanzamiento && !precio && !estado && !tipo && !compania) {
       return { formRequired: true };
     }
 
@@ -89,6 +105,37 @@ export class NuevoComponent implements OnInit{
     this.tipo.setValue(String(selectedValue));
   }
 
+  cambiarCompania(event: Event) :void{
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.compania.setValue(String(selectedValue));
+    console.log(this.compania.value);
+    switch(this.compania.value){
+      case 'Nintendo':
+        this.plataforma.setValue('Switch');
+        break;
+      case 'PlayStation':
+        this.plataforma.setValue('PS5');
+        break;
+      case 'Xbox':
+        this.plataforma.setValue('Series X/S');
+        break;
+      case 'PC':
+        this.plataforma.setValue('Windows');
+        break;
+      case 'Otros':
+        this.plataforma.setValue('SEGA');
+        break;
+
+    }
+    console.log(this.plataforma.value);
+    
+  }
+
+  cambiarPlataforma(event: Event) :void{
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.plataforma.setValue(String(selectedValue));
+    console.log(this.plataforma.value);
+  }
   subirVideojuego() {
     
     const videojuego: VideojuegoNuevo = {
@@ -102,7 +149,9 @@ export class NuevoComponent implements OnInit{
       imagenPrincipal: this.imageBase64,
       imagenSecundaria: this.image2Base64,
       imagenTerciaria: this.image3Base64,
-      imagenCuaternaria: this.image4Base64
+      imagenCuaternaria: this.image4Base64,
+      plataforma: this.plataforma.value,
+      compania: this.compania.value
     };
     this.#videoJuegoService
     .nuevoVideojuego(videojuego)

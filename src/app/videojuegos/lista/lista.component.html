@@ -1,15 +1,52 @@
-
-
-<div class="container mt-4 ">
-<div class="row">
-  @for (videojuego of videojuegos;  track videojuego._id) {
-    @if(videojuego.vendido === false){
-      <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
-        <app-card [videojuego]="videojuego"></app-card>
+<div class="container mt-4">
+  <div class="row">
+    <form class="d-flex buscar mb-3">
+      <input class="form-control me-2" type="search" name="search" [(ngModel)]="search" placeholder="Buscar" aria-label="Search">
+    </form>
+    <!-- Columna de Filtros -->
+    <div class="col-lg-2 col-md-2 col-sm-2">
+      <div class="form-group">
+        <form>
+          <div class="platform-group">
+            @for(string of Plataformas; track string){
+            <label class="d-block">
+              @if(string.id === 1)
+              {
+                <h4 for="Nintendo">Nintendo</h4>
+              }
+              @if(string.id === 10)
+              {
+                <h4 for="PlayStation">PlayStation</h4>
+              }
+              @if(string.id === 17)
+              {
+                <h4 for="Xbox">Xbox</h4>
+              }
+              @if(string.id === 21)
+              {
+                <h4 for="PC">PC</h4>
+              }
+              @if(string.id === 24){
+                <h4 for="Otros">Otros</h4>
+              }
+              <input type="checkbox" value="{{string.id}}" [checked]="string.select" (change) ="filtrarPlataformas($event)" class="dark"> {{string.name}}
+            </label>
+          }
+          </div>
+        </form>
+        <!-- Lista de checkboxes para cada plataforma -->
       </div>
-    }
-   
-  }
+    </div>
+    <div class="col-lg-10 col-md-10 col-sm-10">
+      <div class="row">
+        @for (videojuego of videojuegos | filtroPipe:Plataformas | videoJuegosFilter:search; track videojuego._id) {
+            @if(videojuego.vendido === false){
+              <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+                <app-card [videojuego]="videojuego"></app-card>
+              </div>
+              }
+        }
+      </div>
+    </div>
+  </div>
 </div>
-
-

@@ -12,6 +12,8 @@ export interface Videojuego {
     imagenTerciaria?: string;
     imagenCuaternaria?: string;
     vendido?: boolean;
+    plataforma: string;
+
 
 }
 
@@ -27,6 +29,8 @@ export interface VideojuegoNuevo{
     imagenSecundaria?: string;
     imagenTerciaria?: string;
     imagenCuaternaria?: string;
+    plataforma?: string;
+    compania?: string;
     
 }
 

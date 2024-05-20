@@ -1,6 +1,7 @@
 <div class="container">
   <div class="row mt-4" id="profile">
-    <div class="col-3">
+    
+    <div class="col-3 ">
       <div class="text-center">
         <img class="w-100" id="avatar" src="/assets/Resident-Evil.jpg" alt="Avatar" />
       </div>
@@ -18,26 +19,81 @@
 
       }
       <star-rating [rating]="usuario.valoracion"></star-rating>
+      <a class="btn btn-outline-danger w-100 mb-4 mt-4" [routerLink]="['/profile/me']" (click)="logout()">Cerrar sesión</a>
+
 
 
     </div>
     @if(logged() && !id)
     {
-    <div class="container">
-      <div id="formularioSaldo">
-        <h2>Recargar Saldo</h2>
-        <form (ngSubmit)="recargarSaldo()" [formGroup]="form">
-          <div class="form-group">
-            <label for="amount">Cantidad:</label>
-            <input type="number" min="1" class="form-control" id="saldo" name="saldo" formControlName="saldo" required>
-          </div>
-          <button type="submit" class="btn btn-dark mt-2">Recargar</button>
-        </form>
+      <div class="tabs mt-4">
+        <button (click)="setActiveTab2('saldo')" class="btn btn-outline-dark me-2"
+        [ngClass]="{ 'active': activeTab2 === 'saldo' }">Recargar saldo</button>
+        <button (click)="setActiveTab2('contrasena')" class="btn btn-outline-dark me-2"
+        [ngClass]="{ 'active': activeTab2 === 'contrasena' }">Cambiar contraseña</button>
       </div>
-    </div>
+      <div class="tab-content">
+        <div *ngIf="activeTab2 === 'saldo'">
+          <div class="container mt-4">
+            <h3>RECARGAR SALDO</h3>
+      
+            <div class="row">
+              <div class="col-md-8">
+                <form (ngSubmit)="recargarSaldo()" [formGroup]="form">
+                  <div class="form-group" id="card-number-field">
+                    <label for="cardNumber">Número de la tarjeta</label>
+                    <input type="text" class="form-control" id="cardNumber">
+                  </div>
+                  <div class="form-group CVV">
+                    <label for="cvv">CVV</label>
+                    <input type="text" class="form-control" id="cvv">
+                  </div>
+                  <div class="form-group" id="expiration-date">
+                    <label class="expiracion">Fecha expiración</label>
+                    <select class="expiracion">
+                      <option value="01">Enero</option>
+                      <option value="02">Febero</option>
+                      <option value="03">Marzo</option>
+                      <option value="04">Abril</option>
+                      <option value="05">Mayo</option>
+                      <option value="06">Junio</option>
+                      <option value="07">Julio</option>
+                      <option value="08">Agosto</option>
+                      <option value="09">Septiembre</option>
+                      <option value="10">Octubre</option>
+                      <option value="11">Noviembre</option>
+                      <option value="12">Diciembre</option>
+                    </select>
+                    <select class="expiracion">
+                      <option value="16">2025</option>
+                      <option value="17">2026</option>
+                      <option value="18">2027</option>
+                      <option value="19">2028</option>
+                      <option value="20">2029</option>
+                      <option value="21">2030</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="amount">Saldo:</label>
+                    <input type="number" min="1" class="form-control" id="saldo" name="saldo" formControlName="saldo" required>
+                  </div>
+                  <button type="submit" class="btn btn-dark mt-2 btnSaldo">Recargar</button>
+                </form>
+                <div id="imagenes">
+                  <img id="portada" src="/assets/formulario1.jpg" alt="">
+                  <img id="trasera" src="/assets/formulario2.jpg" alt="">
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          
+        </div>
+        <div *ngIf="activeTab2 === 'contrasena'"> PRUEBA CONTRASEÑA</div>
+     
+        </div>
+       
 
-
-    <a class="btn btn-outline-danger" [routerLink]="['/profile/me']" (click)="logout()">Cerrar sesión</a>
     }
   </div>
   <div class="mt-4" id="map">
@@ -52,9 +108,11 @@
     }
     <div class="contenedor-flexbox">
       @for (videojuego of videoJuegos; track videojuego._id) {
-      <div class="col-lg-3 col-md-4 col-sm-6 mb-3 ">
-        <app-card [videojuego]="videojuego"></app-card>
-      </div>
+        @if(videojuego.vendido === false){
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-3 ">
+            <app-card [videojuego]="videojuego"></app-card>
+          </div>
+        }
       }
     </div>
     }
@@ -67,16 +125,16 @@
   <div class="tabs">
     <button (click)="setActiveTab('compras')" class="btn btn-outline-dark me-2"
       [ngClass]="{ 'active': activeTab === 'compras' }">Mis Compras</button>
-    <button (click)="setActiveTab('ventas')" class="btn btn-outline-dark"
+    <button (click)="setActiveTab('ventas')" class="btn btn-outline-dark me-2"
       [ngClass]="{ 'active': activeTab === 'ventas' }">Mis Ventas</button>
-    <button (click)="setActiveTab('finalizadas')" class="btn btn-outline-dark"
+    <button (click)="setActiveTab('finalizadas')" class="btn btn-outline-dark me-2"
       [ngClass]="{ 'active': activeTab === 'finalizadas' }">Finalizadas</button>
 
   </div>
-  <div class="tab-content">
+  <div class="tab-content ">
     <div *ngIf="activeTab === 'finalizadas'">
       <h1>Finalizadas</h1>
-      <div class="container-fluid">
+      <div class="container-fluid ml-3">
         @for (transaccion of transaccionesFinalizadas; track transaccion._id)
         {
         @if(transaccion.finalVendedor._id == usuario._id)

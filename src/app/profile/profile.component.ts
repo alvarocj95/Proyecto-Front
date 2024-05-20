@@ -144,11 +144,14 @@ export class ProfileComponent implements OnInit {
   }
 
   activeTab: string = 'compras'; 
-
+  activeTab2: string = 'saldo'
   setActiveTab(tab: string): void {
     this.activeTab = tab;
   }
 
+  setActiveTab2(tab: string): void {
+    this.activeTab2 = tab;
+  }
   recargarSaldo(){
     const saldo = this.form.value.saldo;
     this.#profileService.actualizarSaldo(this.usuario._id, this.saldo.value).subscribe({
@@ -197,36 +200,6 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  // finalizarTransaccion(id: string) {
-    
-  //   this.confirmDialog3.fire().then((result) => {
-  //     if (result.isConfirmed) {
-  //       this.#transaccionService.getArticuloTransaccion(id).subscribe({
-  //         next: (articulo) => {
-  //           this.transaccionArticulo = articulo;
-            
-  //           this.#videojuegoService.juegoVendido(this.transaccionArticulo.idArticulo._id).subscribe({
-  //             next: () => {
-  //               this.ngOnInit();
-  //             },
-  //             error: () => {
-  //               this.ngOnInit();
-  //             },
-  //           })
-  //         },
-  //       })
-  //       this.#transaccionService.finalizarTransaccion(id, this.transaccionArticulo.idComprador._id, this.transaccionArticulo.idVendedor._id).subscribe({
-  //         next: () => {
-  //           this.ngOnInit();
-  //         },
-  //         error: () => {
-  //           this.ngOnInit();
-  //         },
-  //       });
-        
-  //     }
-  //   });
-  // }
   finalizarTransaccion(id: string) {
     this.confirmDialog3.fire().then((result) => {
       if (result.isConfirmed) {

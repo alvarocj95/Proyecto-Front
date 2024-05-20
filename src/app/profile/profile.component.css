@@ -1,46 +1,46 @@
 #profile {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 20px;
-  }
-  #avatar {
-    border-radius: 50%;
-    max-width: 100px;
-  }
-  #name {
-    margin-top: 10px;
-  }
-  #email {
-    margin-bottom: 20px;
-  }
-
-  .contenedor-flexbox {
-    display: flex;
-    flex-wrap: wrap; /* Permite que los elementos se envuelvan en varias filas si es necesario */
-    justify-content: space-between; /* Distribuye los elementos de manera uniforme */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
 }
 
-.button{
+#avatar {
+  border-radius: 50%;
+  max-width: 100px;
+}
+
+#name {
+  margin-top: 10px;
+}
+
+#email {
+  margin-bottom: 20px;
+}
+
+.contenedor-flexbox {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.button {
   margin-right: 15px;
 }
 
-.tabs{
+.tabs {
   margin-bottom: 20px;
 }
 
-#formularioSaldo{
-  margin-bottom: 20px;
-  margin-top: 10px;
-}
 
-#btnSaldo{
+.btnSaldo {
   margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .transaction-image {
   width: 100%;
   height: auto;
-  max-height: 300px; /* Ajusta el tamaño máximo según tus necesidades */
+  max-height: 300px;
   object-fit: cover;
 }
 
@@ -48,6 +48,87 @@
   width: 300px;
 }
 
-.vendido{
+.vendido {
   background-color: red;
+}
+
+#formularioSaldo {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+
+.form-group select {
+  background-color: rgba(58, 58, 58, 0.1);
+  border-radius: 3px;
+}
+
+.form-group input {
+  background-color: rgba(58, 58, 58, 0.1);
+}
+
+.expiracion {
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+/* 
+#imagenes img {
+  width: 60%;
+  height: auto;
+}
+
+#imagenes {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+} */
+
+
+#imagenes {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  position: relative;
+  flex: 1;
+  width: 470px; 
+  height: 300px; 
+  transform-style: preserve-3d;
+  transition: transform 2s;
+  margin: 27px; 
+
+  &:hover {
+      #trasera {
+          opacity: 1;
+      }
+
+      transform: rotateY(180deg);
+  }
+}
+
+#portada {
+  width: 470px;
+  height: 300px;
+  border-radius: 6.7px; 
+}
+
+
+#trasera {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 470px;
+  height: 300px;
+  backface-visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 1.5s;
+  transform: rotateY(180deg);
+  border-radius: 6.7px; 
 }

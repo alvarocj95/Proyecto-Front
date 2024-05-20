@@ -1,3 +1,22 @@
 .divBuscar{
     background-color: #343a40;
 }
+
+.buscar {
+    font-family: RetroGaming, sans-serif;
+  }
+
+  .platform-group h3 {
+    margin-top: 0;
+    padding-top: 10px;
+  }
+  
+  .platform-group label {
+    font-size: 14px;
+    margin: 5px 0;
+    display: block; /* Asegura que cada checkbox esté en su propia línea */
+  }
+  
+  .form-group {
+    padding-right: 10px; /* Evita que los elementos toquen el borde del div */
+  }
