@@ -29,6 +29,7 @@
            
            
           </ul>
+          <!-- <button class="btn btn-dark" (click)="cambiarTema()">Cambiar tema </button> -->
          
          
           @if(logged()){
@@ -45,9 +46,14 @@
           }
           @if(logged())
             {
+              @if(usuarioLogueado.imagen !== ""){
                 <a class="nav-link text-light"  [routerLinkActive]="['active']"  [routerLink]="['/profile/me']">
-                  <img class="logout" src="/assets/crystal.png" id="iconoLogout"  alt="" width="40px">
+                  <img class="logout" [src]="usuarioLogueado.imagen" id="iconoLogout"  alt="" width="40px">
                 </a>
+              }
+                <!-- <a class="nav-link text-light"  [routerLinkActive]="['active']"  [routerLink]="['/profile/me']">
+                  <img class="logout" src="/assets/robot.png" id="iconoLogout"  alt="" width="40px">
+                </a> -->
             }
         </div>
       </div>

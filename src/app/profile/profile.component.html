@@ -3,7 +3,13 @@
     
     <div class="col-3 ">
       <div class="text-center">
-        <img class="w-100" id="avatar" src="/assets/Resident-Evil.jpg" alt="Avatar" />
+        @if(usuario.imagen !== ""){
+          <img class="w-100" id="avatar" [src]="usuario?.imagen" alt="Avatar" />
+
+        }
+        @else{
+          <img class="w-100" id="avatar" src="/assets/robot.png" alt="Avatar" />
+        }
       </div>
     </div>
     <div class="col-9" id="profileInfo">
@@ -79,10 +85,7 @@
                   </div>
                   <button type="submit" class="btn btn-dark mt-2 btnSaldo">Recargar</button>
                 </form>
-                <div id="imagenes">
-                  <img id="portada" src="/assets/formulario1.jpg" alt="">
-                  <img id="trasera" src="/assets/formulario2.jpg" alt="">
-                </div>
+               
               </div>
               
             </div>

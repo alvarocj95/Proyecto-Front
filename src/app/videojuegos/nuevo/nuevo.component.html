@@ -84,7 +84,7 @@
           <label for="imagen4">Imagen 4</label>
           <input type="file" class="form-control" formControlName="imagen4" (change)="changeImage4($event)">
         </div>
-        <button type="submit" class="btn btn-dark">Enviar</button>
+        <button type="submit" class="btn btn-dark" [disabled]="form.invalid">Enviar</button>
       </form>
     </div>
   </div>

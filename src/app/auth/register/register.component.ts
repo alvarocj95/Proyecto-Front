@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UsuarioRegistro } from '../interfaces/usuarios';
+import { Usuario, UsuarioRegistro } from '../interfaces/usuarios';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { ProfileService } from '../../profile/services/profile.service';
 
 @Component({
   selector: 'app-register',
@@ -13,17 +14,19 @@ import Swal from 'sweetalert2';
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit{
   #router = inject(Router);
   #authService = inject(AuthService);
+  #profileService = inject(ProfileService);
   #fb = inject(NonNullableFormBuilder);
-
+  usuarios: Usuario[] = [];
+  usuarioExistente = false;
   imageBase64?: string;
 
-  nombre = this.#fb.control('', Validators.required);
+  nombre = this.#fb.control('', [Validators.required, Validators.minLength(4)]);
   email = this.#fb.control('', [Validators.required, Validators.email]);
   password = this.#fb.control('',[Validators.required, Validators.minLength(4)])
-  imagen = this.#fb.control('');
+  imagen = this.#fb.control('', Validators.required);
   plan = this.#fb.control('Básico');
 
 
@@ -46,29 +49,70 @@ export class RegisterComponent {
     });
   }
 
-  register(){
+  ngOnInit(): void {
+    this.obtenerUsuarios();
+  }
+
+  obtenerUsuarios(){
+    this.#profileService.getUsuarios().subscribe({
+      next: (resp) => {
+        this.usuarios = resp.usuarios;
+      }
+    })
+  }
+
+
+  async register(): Promise<void> {
     const usuario: UsuarioRegistro = {
       nombre: this.formGroup.value.nombre,
       email: this.formGroup.value.email,
       password: this.formGroup.value.password,
-      imagen: '',
+      imagen: this.imageBase64,
       plan: this.formGroup.value.plan
-    }
-
-    this.#authService.registro(usuario).subscribe({
-      next: () => {
+    };
+  
+    try {
+      const existingUser = await this.checkForExistingUser(usuario.nombre, usuario.email);
+      if (existingUser) {
         Swal.fire({
-          icon: 'success',
-          title: 'Se ha registrado correctamente',
-          showConfirmButton: false,
-          
-        })
-      },
-      error: (error) => {
-        console.log(error);
+          icon: 'error',
+          title: 'Oops...',
+          text: 'El usuario ya existe',
+        });
+        return; 
       }
-    });
+  
+      this.#authService.registro(usuario).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Se ha registrado correctamente',
+            showConfirmButton: false
+          });
+          this.#router.navigate(['/auth/login']); 
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error del servidor',
+          });
+        }
+      });
+    } catch (error) {
+      console.error('Error checking for existing user:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Error al registrarse',
+      });
+    }
   }
+  public async checkForExistingUser(nombre: string | undefined, email: string | undefined): Promise<Usuario | null> {
+      const existingUser = this.usuarios.find(user => user.nombre === nombre || user.email === email);
+      return existingUser || null;
+  }
+  
 
   cambiarPlan(event: Event) :void{
     const selectedValue = (event.target as HTMLSelectElement).value;

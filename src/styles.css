@@ -59,7 +59,50 @@
     
 
 }
- 
+
+.buscar {
+  font-family: RetroGaming, sans-serif;
+}
+
+.platform-group h3 {
+  margin-top: 0;
+  padding-top: 10px;
+}
+
+.platform-group label {
+  font-size: 14px;
+  margin: 5px 0;
+  display: block;
+}
+
+.form-group {
+  padding-right: 10px; 
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column; 
+  align-items: start;
+  margin-bottom: 1rem; 
+}
+
+.filter-group label {
+  font-size: 0.8rem;
+  color: #333; 
+}
+
+.filter-group select {
+  font-size: 0.8rem; 
+  padding: 5px 10px; 
+  border: 1px solid #ccc; 
+  border-radius: 3px; 
+  background-color: #fff; 
+  cursor: pointer; 
+}
+
+.col-lg-3.col-md-4.col-sm-6 {
+  margin: 1.5rem; 
+}
   @media (min-width: 768px) {
     html {
       font-size: 1em;

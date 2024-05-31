@@ -9,11 +9,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Transaccion } from '../../transacciones/interfaces/transaccion';
 import { TransaccionService } from '../../transacciones/transaccion.service';
 import { filtroPipe } from '../pipes/filtro.pipe';
+import { FiltroFechaPrecioPipe } from '../pipes/filtroFechaPrecio';
 
 @Component({
   selector: 'app-lista',
   standalone: true,
-  imports: [CardComponent,FormsModule, CommonModule, videojuegoFilterPipe, filtroPipe, FormsModule],
+  imports: [CardComponent,FormsModule, CommonModule, videojuegoFilterPipe, filtroPipe, FiltroFechaPrecioPipe, FormsModule],
   templateUrl: './lista.component.html',
   styleUrl: './lista.component.css'
 })
@@ -27,7 +28,8 @@ export class ListaComponent implements OnInit{
   constructor(private route: ActivatedRoute) { }
   transacciones!: Transaccion[];
   count: number = 0;
-  
+  selectedFilter: string = 'none'; 
+
 
   parentSelector: boolean = false;
   Plataformas: { id: number, name: string, select: boolean }[] = [
@@ -59,7 +61,28 @@ export class ListaComponent implements OnInit{
     {id : 26, name: 'Neo Geo', select: false},
   ]
 
- 
+  onFilterChange() {
+    if (this.selectedFilter === 'none') {
+      return;
+    }
+
+    const filteredGames = this.videojuegos.slice();
+
+    switch (this.selectedFilter) {
+      case 'date':
+        filteredGames.sort((a, b) => b.lanzamiento - a.lanzamiento);
+        break;
+      case '-date':
+        filteredGames.sort((a, b) => a.lanzamiento - b.lanzamiento);
+        break;
+      case 'price':
+        filteredGames.sort((a, b) => a.precio - b.precio);
+        break;
+      case '-price':
+        filteredGames.sort((a, b) => b.precio - a.precio);
+        break;
+    }
+  }
 
   ngOnInit(): void {
         this.loadAllVideojuegos();

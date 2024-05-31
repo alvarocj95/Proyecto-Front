@@ -24,10 +24,10 @@ export class NuevoComponent implements OnInit{
   usuario!: Usuario;
 
 
-  titulo = this.#fb.control('', [Validators.minLength(10)]);
-  descripcion = this.#fb.control('', [Validators.minLength(20)]);
+  titulo = this.#fb.control('', [Validators.required, Validators.minLength(10)]);
+  descripcion = this.#fb.control('', [Validators.required, Validators.minLength(20)]);
   lanzamiento = this.#fb.control(2024);
-  precio = this.#fb.control(0);
+  precio = this.#fb.control(1);
   estado = this.#fb.control('Precintado');
   tipo = this.#fb.control('Consola');
   compania = this.#fb.control('Nintendo');
@@ -41,7 +41,7 @@ export class NuevoComponent implements OnInit{
     Otros: ['SEGA', 'Atari', 'Neo Geo']
   };
 
-  imagen = this.#fb.control('');
+  imagen = this.#fb.control('', Validators.required);
   imagen2 = this.#fb.control('');
   imagen3 = this.#fb.control('');
   imagen4 = this.#fb.control('');
@@ -61,7 +61,11 @@ export class NuevoComponent implements OnInit{
     estado: this.estado,
     tipo: this.tipo,
     compania: this.compania,
-    plataforma: this.plataforma
+    plataforma: this.plataforma,
+    imagen: this.imagen,
+    imagen2: this.imagen2,
+    imagen3: this.imagen3,
+    imagen4: this.imagen4
   },
     {validators: this.formRequired}
   );
@@ -85,10 +89,10 @@ export class NuevoComponent implements OnInit{
     const estado = c.get('estado')?.value;
     const tipo = c.get('tipo')?.value;
     const compania = c.get('compania')?.value;
-    
-    
+    const plataforma = c.get('plataforma')?.value;
+    const imagen = c.get('imagenPrincipal')?.value;
 
-    if (!titulo && !descripcion && !lanzamiento && !precio && !estado && !tipo && !compania) {
+    if (!titulo && !descripcion && !lanzamiento && !precio && !estado && !tipo && !compania && !imagen && !plataforma ) {
       return { formRequired: true };
     }
 

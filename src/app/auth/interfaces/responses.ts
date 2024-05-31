@@ -9,6 +9,10 @@ export interface UsuarioResponse {
     resultado: Usuario;
 }
 
+export interface ImagenResponse {
+    imagen: string;
+}
+
 export interface UsuariosRespone {
     usuarios: Usuario[];
 }

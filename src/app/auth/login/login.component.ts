@@ -1,13 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { UsuarioLogin } from '../interfaces/usuarios';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLinkActive],
+  imports: [ReactiveFormsModule, RouterLinkActive, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -35,7 +36,12 @@ export class LoginComponent {
         this.#router.navigate(['/videojuegos']);
       },
       error: (error) => {
-        console.log(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Usuario o contraseña incorrecto',
+        }
+        );
       }
     });
   }

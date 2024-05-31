@@ -3,11 +3,20 @@
     <form class="d-flex buscar mb-3">
       <input class="form-control me-2" type="search" name="search" [(ngModel)]="search" placeholder="Buscar" aria-label="Search">
     </form>
-    <!-- Columna de Filtros -->
     <div class="col-lg-2 col-md-2 col-sm-2">
       <div class="form-group">
         <form>
           <div class="platform-group">
+            <div class="filter-group">
+              <label>Ordenar por:</label>
+              <select [(ngModel)]="selectedFilter" (change)="onFilterChange()"  [ngModelOptions]="{standalone: true}">
+                <option value="none">Ninguno</option>
+                <option value="date">Fecha (nueva a vieja)</option>
+                <option value="-date">Fecha (vieja a nueva)</option>
+                <option value="price">Precio (bajo a alto)</option>
+                <option value="-price">Precio (alto a bajo)</option>
+              </select>
+            </div>
             @for(string of Plataformas; track string){
             <label class="d-block">
               @if(string.id === 1)
@@ -29,17 +38,18 @@
               @if(string.id === 24){
                 <h4 for="Otros">Otros</h4>
               }
-              <input type="checkbox" value="{{string.id}}" [checked]="string.select" (change) ="filtrarPlataformas($event)" class="dark"> {{string.name}}
+              <input type="checkbox" value="{{string.id}}" [checked]="string.select" (change) ="filtrarPlataformas($event)" class="filtrar">
+              <span class="filtrar"> {{string.name}} </span>
+
             </label>
           }
           </div>
         </form>
-        <!-- Lista de checkboxes para cada plataforma -->
       </div>
     </div>
     <div class="col-lg-10 col-md-10 col-sm-10">
       <div class="row">
-        @for (videojuego of videojuegos | filtroPipe:Plataformas | videoJuegosFilter:search; track videojuego._id) {
+        @for (videojuego of videojuegos | filtroPipe:Plataformas | videoJuegosFilter:search | filtroFechaPrecio:selectedFilter; track videojuego._id) {
             @if(videojuego.vendido === false){
               <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
                 <app-card [videojuego]="videojuego"></app-card>

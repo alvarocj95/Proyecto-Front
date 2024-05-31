@@ -96,6 +96,15 @@ export class ProfileComponent implements OnInit {
         next: (user) => {
           console.log(user);
           this.usuario = user.resultado;
+          this.#profileService.getImagenPerfil(this.usuario._id).subscribe({
+            next: (imagen) => {
+              this.usuario.imagen = imagen.imagen;
+            },
+            error: (error) => {
+              console.error('Error al obtener la imagen:', error);
+            },
+          })
+        
           this.#videojuegoService
             .getVideojuegosJugador(this.usuario._id)
             .subscribe({
@@ -122,6 +131,7 @@ export class ProfileComponent implements OnInit {
                 console.error('Error al obtener las transacciones:', error);
               },
             })
+            
         },
         error: (error) => {
           console.error('Error al obtener mi perfil:', error);

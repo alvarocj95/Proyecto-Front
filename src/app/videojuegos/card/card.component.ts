@@ -30,30 +30,6 @@ export class CardComponent implements OnInit{
   liked: boolean = false;
   #router = inject(Router);
 
-  // nuevoLike(){
-  //   this.#likesService.nuevoLike(this.videojuego._id, this.usuarioLogueado._id).subscribe({
-  //     next: (like) => {
-  //       console.log(like);
-  //       this.ngOnInit();
-  //     }
-  //   })
-  // }
-
-  // quitarLike(){
-  //   this.#likesService.borrarLike(this.videojuego._id, this.usuarioLogueado._id).subscribe({
-  //     next: (like) => {
-  //       console.log(like);
-  //       // Swal.fire({
-  //       //   icon: 'success',
-  //       //   title: 'Se ha quitado el like',
-  //       //   showConfirmButton: false,
-  //       //   timer: 1500
-  //       // })
-  //       this.liked = false;
-  //       this.ngOnInit();
-  //     }
-  //   })
-  // }
   nuevoLike(){
     if (this.videojuego && this.usuarioLogueado) {
       this.#likesService.nuevoLike(this.videojuego._id, this.usuarioLogueado._id).subscribe({
