@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   Input,
   OnInit,
@@ -11,7 +12,7 @@ import { AuthService } from '../auth/services/auth.service';
 import { ProfileService } from './services/profile.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Usuario } from '../auth/interfaces/usuarios';
+import { UserPasswordEdit, Usuario } from '../auth/interfaces/usuarios';
 import { UsuarioResponse } from '../auth/interfaces/responses';
 import { SsrCookieService } from 'ngx-cookie-service-ssr';
 import { VideojuegoService } from '../videojuegos/services/videojuego.service';
@@ -21,8 +22,9 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
 import { Transaccion } from '../transacciones/interfaces/transaccion';
 import { TransaccionService } from '../transacciones/transaccion.service';
 import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { FiltroTransacciones } from '../videojuegos/pipes/filtroTransacciones';
 
 @Component({
   selector: 'app-profile',
@@ -37,7 +39,8 @@ import Swal from 'sweetalert2';
     RouterLink,
     SweetAlert2Module,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    FiltroTransacciones
     
   ],
 })
@@ -57,20 +60,40 @@ export class ProfileComponent implements OnInit {
   transaccionesFinalizadas!: Transaccion[];
   transaccionArticulo!: Transaccion;
   #fb = inject(NonNullableFormBuilder);
+  password = this.#fb.control('',[Validators.required, Validators.minLength(4)]);  
+  password2 = this.#fb.control('',[Validators.required, Validators.minLength(4)]);
+  saldo = this.#fb.control(1, [Validators.required, Validators.min(1)]);
+  activeTab: string = 'compras'; 
+  activeTab2: string = 'saldo';
+  
+  form = this.#fb.group({
+    saldo: this.saldo,
+  });
+
+  formPassword = this.#fb.group(
+    {
+      password: this.password,
+      password2: this.password2
+    }, {validators: this.equalPass}
+  );
+
 
   
-  
+  equalPass():ValidatorFn{
+    return (control: AbstractControl): ValidationErrors | null => {
+      const pass1 = control.get('password')?.value;
+      const pass2 = control.get('password2')?.value;
+      if (pass1 != pass2) {
+        return { email: true };
+      }
+      return null;      
+    };
+  }
 
   @ViewChild('confirmDialog') confirmDialog!: SwalComponent;
   @ViewChild('confirmDialog2') confirmDialog2!: SwalComponent;
   @ViewChild('confirmDialog3') confirmDialog3!: SwalComponent;
 
-
-  saldo = this.#fb.control(1, [Validators.required, Validators.min(1)]);
-
-  form = this.#fb.group({
-    saldo: this.saldo,
-  });
 
 
   ngOnInit(): void {
@@ -153,8 +176,7 @@ export class ProfileComponent implements OnInit {
     this.#router.navigate(['/login']);
   }
 
-  activeTab: string = 'compras'; 
-  activeTab2: string = 'saldo'
+  
   setActiveTab(tab: string): void {
     this.activeTab = tab;
   }
@@ -162,19 +184,78 @@ export class ProfileComponent implements OnInit {
   setActiveTab2(tab: string): void {
     this.activeTab2 = tab;
   }
-  recargarSaldo(){
+  // recargarSaldo(){
+  //   const saldo = this.form.value.saldo;
+  //   this.#profileService.actualizarSaldo(this.usuario._id, this.saldo.value).subscribe({
+  //     next: () => {
+  //       Swal.fire({
+  //         icon: 'success',
+  //         title: 'Saldo actualizado',
+  //       })
+  //       this.#profileService.getMiPerfil().subscribe({
+  //         next: (user) => {
+  //           this.usuario = user.resultado;
+  //         },
+  //         error: (error) => {
+  //           console.error('Error al obtener el perfil:', error);
+  //         },
+  //       })
+  //     },
+      
+  //     error: () => {
+  //       this.ngOnInit();
+  //     },
+  //   })
+  // }
+  constructor(private cd: ChangeDetectorRef) {
+  }
+
+  recargarSaldo() {
     const saldo = this.form.value.saldo;
     this.#profileService.actualizarSaldo(this.usuario._id, this.saldo.value).subscribe({
       next: () => {
         Swal.fire({
           icon: 'success',
           title: 'Saldo actualizado',
-        })
+        });
+        
         this.usuario.saldo += this.saldo.value;
+        this.cd.detectChanges(); 
+
+        
+        this.#profileService.getMiPerfil().subscribe({
+          next: (user) => {
+            this.usuario = user.resultado;
+            this.cd.detectChanges(); 
+          },
+          error: (error) => {
+            console.error('Error al obtener el perfil:', error);
+          },
+        });
       },
       error: () => {
         this.ngOnInit();
       },
+    });
+  }
+  
+  changePass(){
+    const newPass: UserPasswordEdit = {
+      ...this.formPassword.getRawValue()
+    };
+    this.#profileService.editPassword(this.usuario._id, newPass.password).subscribe({
+      next:()=>{
+        Swal.fire({
+          icon: 'success',
+          title: 'Contraseña actualizada',
+          text: 'Redirigiendo a login...',
+          showConfirmButton: false,
+          timer: 1500,
+          timerProgressBar: true
+        })
+        this.#router.navigate(['/login']);
+      },
+      error: (error) => console.error(error),
     })
   }
 
@@ -213,13 +294,11 @@ export class ProfileComponent implements OnInit {
   finalizarTransaccion(id: string) {
     this.confirmDialog3.fire().then((result) => {
       if (result.isConfirmed) {
-        // Fetch transaction article first
         this.#transaccionService.getArticuloTransaccion(id)
           .subscribe({
             next: (articulo) => {
               this.transaccionArticulo = articulo;
   
-              // Use the fetched data only after successful retrieval
               this.#transaccionService.finalizarTransaccion(
                 id,
                 this.transaccionArticulo.idComprador._id,
@@ -227,32 +306,57 @@ export class ProfileComponent implements OnInit {
               )
                 .subscribe({
                   next: () => {
-                    // Transaction finalized successfully
                     this.#videojuegoService.juegoVendido(this.transaccionArticulo.idArticulo._id)
                     .subscribe({
                       next: () => {
-                        // Game marked as sold successfully
                         this.ngOnInit();
                       },
                       error: (error) => {
                         console.error('Error marking game as sold:', error);
-                        // Handle error appropriately
                       },
                     });
                   },
                   error: (error) => {
                     console.error('Error finalizing transaction:', error);
-                    // Handle error appropriately
                   },
                 });           
             },
             error: (error) => {
               console.error('Error fetching transaction article:', error);
-              // Handle error appropriately (e.g., display error message to user)
             },
           });
       }
     });
   }
-  
+  validClasses(ngModel: FormControl, validClass: string, errorClass: string) {
+    return {
+      [validClass]: ngModel.touched && ngModel.valid && ngModel.value,
+      [errorClass]: ngModel.touched && ngModel.invalid,
+    };
+  }
+
+  selectedFilter: string = 'none'; 
+
+  // onFilterChange() {
+  //   if (this.selectedFilter === 'none') {
+  //     return;
+  //   }
+
+  //   const filteredGames = this.transacciones.slice();
+
+  //   switch (this.selectedFilter) {
+  //     case 'Aceptada':
+  //       filteredGames.sort((a, b) => b.f - a.lanzamiento);
+  //       break;
+  //     case '-date':
+  //       filteredGames.sort((a, b) => a.lanzamiento - b.lanzamiento);
+  //       break;
+  //     case 'price':
+  //       filteredGames.sort((a, b) => a.precio - b.precio);
+  //       break;
+  //     case '-price':
+  //       filteredGames.sort((a, b) => b.precio - a.precio);
+  //       break;
+  //   }
+  // }
 }

@@ -21,3 +21,7 @@ export interface UsuarioLogin{
     password: string;
 }
 
+export interface UserPasswordEdit {
+    password: string;
+}
+

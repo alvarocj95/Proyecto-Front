@@ -9,7 +9,7 @@
           <div class="platform-group">
             <div class="filter-group">
               <label>Ordenar por:</label>
-              <select [(ngModel)]="selectedFilter" (change)="onFilterChange()"  [ngModelOptions]="{standalone: true}">
+              <select [(ngModel)]="selectedFilter" [ngModelOptions]="{standalone: true}">
                 <option value="none">Ninguno</option>
                 <option value="date">Fecha (nueva a vieja)</option>
                 <option value="-date">Fecha (vieja a nueva)</option>
@@ -48,7 +48,7 @@
       </div>
     </div>
     <div class="col-lg-10 col-md-10 col-sm-10">
-      <div class="row">
+      <div class="row videojuego">
         @for (videojuego of videojuegos | filtroPipe:Plataformas | videoJuegosFilter:search | filtroFechaPrecio:selectedFilter; track videojuego._id) {
             @if(videojuego.vendido === false){
               <div class="col-lg-3 col-md-4 col-sm-6 mb-3">

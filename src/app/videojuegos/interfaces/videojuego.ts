@@ -13,7 +13,7 @@ export interface Videojuego {
     imagenCuaternaria?: string;
     vendido?: boolean;
     plataforma: string;
-
+    compania?: string;
 
 }
 

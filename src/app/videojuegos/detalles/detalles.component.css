@@ -14,16 +14,10 @@
 .imagenes{
     width: 100%;
     height: auto;
-    max-height: 150px; /* Ajusta el tamaño máximo según tus necesidades */
+    max-height: 150px; 
     object-fit: cover;
 }
-#info {
-    padding: 20px;
-}
 
-#precios h2 {
-    margin-top: 20px;
-}
 
 .col-4 img {
     width: 100%;
@@ -31,15 +25,15 @@
 }
 
 .bg-light {
-    background-color: #f8f9fa !important; /* Cambia el color de fondo a uno más claro */
+    background-color: #f8f9fa !important; 
 }
 
 .rounded {
-    border-radius: 10px !important; /* Añade bordes redondeados a todos los elementos */
+    border-radius: 10px !important; 
 }
 
 .shadow {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Añade una sombra suave a los elementos */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
 }
 
 h1, h2 {
@@ -66,8 +60,8 @@ a:hover {
     position: absolute;
     top: 0;
     left: 0;
-    width: 200px; /* Ajusta el tamaño del zoom según tus necesidades */
-    height: 200px; /* Ajusta el tamaño del zoom según tus necesidades */
+    width: 200px; 
+    height: 200px; 
     border: 2px solid black;
     background-color: white;
     z-index: 1000;
@@ -83,9 +77,9 @@ a:hover {
   }
   
   .like {
-    color: red; /* Color por defecto del corazón */
-    font-size: 34px; /* Tamaño del ícono */
-    transition: color 0.3s; /* Suaviza la transición de color */
+    color: red;
+    font-size: 34px; 
+    transition: color 0.3s; 
   }
   
   .hand{
@@ -93,9 +87,9 @@ a:hover {
   }
   
   p {
-    color: #333; /* Color del texto */
-    font-size: 20px; /* Tamaño del texto */
-    margin-top: 5px; /* Espacio arriba del texto */
+    color: #333; 
+    font-size: 20px; 
+    margin-top: 5px; 
   }
   
   .container {
@@ -103,4 +97,65 @@ a:hover {
     align-items: center;
     gap: 10px;
   }
+
+
+  #info {
+    padding: 2rem; 
+  }
   
+  #info h1 {
+    font-size: 2rem; 
+    color: #343a40;
+    margin-bottom: 1rem; 
+  }
+  
+  #info p {
+    font-size: 1.1rem; 
+    color: #555; 
+    margin-bottom: 1.5rem; 
+  }
+  
+  #info h2 {
+    font-size: 1.5rem; 
+    color: #6c757d;
+    margin-bottom: 1rem; 
+  }
+  
+  .badge {
+    font-size: 1rem;
+    padding: 0.5rem 1rem; 
+    border-radius: 0.5rem; 
+    margin-top: 0.5rem; 
+    display: inline-block;
+  }
+  
+  .container i {
+    font-size: 1.5rem; 
+    margin-right: 0.5rem; 
+  }
+  
+  .container h4 {
+    display: inline-block;
+    font-size: 1.2rem; 
+    color: #555; 
+  }
+  
+  #precios h2 {
+    font-size: 1.4rem; 
+    color: #6c757d; 
+    margin-bottom: 0.5rem; 
+  }
+  
+  
+  button.btn.btn-dark {
+    font-size: 1.2rem; 
+    padding: 0.75rem 1.5rem; 
+  }
+  
+  #avatar {
+    width: 100px;
+    height: 100px; 
+    border-radius: 50%;
+    object-fit: cover; 
+    margin-top: 1rem; 
+  }

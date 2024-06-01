@@ -61,29 +61,6 @@ export class ListaComponent implements OnInit{
     {id : 26, name: 'Neo Geo', select: false},
   ]
 
-  onFilterChange() {
-    if (this.selectedFilter === 'none') {
-      return;
-    }
-
-    const filteredGames = this.videojuegos.slice();
-
-    switch (this.selectedFilter) {
-      case 'date':
-        filteredGames.sort((a, b) => b.lanzamiento - a.lanzamiento);
-        break;
-      case '-date':
-        filteredGames.sort((a, b) => a.lanzamiento - b.lanzamiento);
-        break;
-      case 'price':
-        filteredGames.sort((a, b) => a.precio - b.precio);
-        break;
-      case '-price':
-        filteredGames.sort((a, b) => b.precio - a.precio);
-        break;
-    }
-  }
-
   ngOnInit(): void {
         this.loadAllVideojuegos();
         this.#transaccionService.getTodasTransacciones().subscribe((transacciones) => {

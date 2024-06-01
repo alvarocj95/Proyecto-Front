@@ -87,9 +87,13 @@ export class RegisterComponent implements OnInit{
           Swal.fire({
             icon: 'success',
             title: 'Se ha registrado correctamente',
-            showConfirmButton: false
+            text: 'Redirigiendo a login...',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true
           });
-          this.#router.navigate(['/auth/login']); 
+          this.#router.navigate(['/login']);
+
         },
         error: (error) => {
           Swal.fire({

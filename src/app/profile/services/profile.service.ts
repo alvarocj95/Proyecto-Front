@@ -2,12 +2,13 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Observable, map } from "rxjs";
 import { ImagenResponse, UsuarioResponse, UsuariosRespone } from "../../auth/interfaces/responses";
-import { Usuario } from "../../auth/interfaces/usuarios";
+import { UserPasswordEdit, Usuario } from "../../auth/interfaces/usuarios";
 
 @Injectable({
     providedIn: 'root'
 })
 export class ProfileService{
+  
  #http = inject(HttpClient);
  #usuariosUrl = 'usuarios';
 
@@ -36,5 +37,11 @@ getUsuarios(): Observable<UsuariosRespone> {
     return this.#http.put<void>(`${this.#usuariosUrl}/${idUser}/saldo`, { nuevoSaldo });
   }
 
+  actualizarSaldoMe(nuevoSaldo: number): Observable<void> {
+    return this.#http.put<void>(`${this.#usuariosUrl}/me}/saldo`, { nuevoSaldo });
+  }
+  editPassword(idUser: string, password: string): Observable<void> {
+    return this.#http.put<void>(`${this.#usuariosUrl}/${idUser}/password`, {password});
+  }
 }
 
