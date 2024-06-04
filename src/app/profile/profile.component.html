@@ -1,11 +1,9 @@
 <div class="container">
   <div class="row mt-4" id="profile">
-    
     <div class="col-3 ">
       <div class="text-center">
         @if(usuario.imagen !== ""){
           <img class="w-100" id="avatar" [src]="usuario?.imagen" alt="Avatar" />
-
         }
         @else{
           <img class="w-100" id="avatar" src="/assets/robot.png" alt="Avatar" />
@@ -26,17 +24,18 @@
       }
       <star-rating [rating]="usuario.valoracion"></star-rating>
       <a class="btn btn-outline-danger w-100 mb-4 mt-4" [routerLink]="['/profile/me']" (click)="logout()">Cerrar sesión</a>
-
-
-
     </div>
     @if(logged() && !id)
     {
       <div class="tabs mt-4">
+        <button (click)="setActiveTab2('tarjeta')" class="btn btn-outline-dark me-2"
+        [ngClass]="{ 'active': activeTab2 === 'tarjeta' }">Añadir tarjeta</button>
         <button (click)="setActiveTab2('saldo')" class="btn btn-outline-dark me-2"
         [ngClass]="{ 'active': activeTab2 === 'saldo' }">Recargar saldo</button>
         <button (click)="setActiveTab2('contrasena')" class="btn btn-outline-dark me-2"
         [ngClass]="{ 'active': activeTab2 === 'contrasena' }">Cambiar contraseña</button>
+        <button (click)="setActiveTab2('nombre')" class="btn btn-outline-dark me-2"
+        [ngClass]="{ 'active': activeTab2 === 'nombre' }">Cambiar nombre usuario</button>
       </div>
       <div class="tab-content">
         <div *ngIf="activeTab2 === 'saldo'">
@@ -48,46 +47,55 @@
                 <form (ngSubmit)="recargarSaldo()" [formGroup]="form">
                   <div class="form-group" id="card-number-field">
                     <label for="cardNumber">Número de la tarjeta</label>
-                    <input type="text" class="form-control" id="cardNumber">
+                    <input type="text" class="form-control" id="cardNumber" formControlName="checkNumeroTarjeta">
                   </div>
+                  
                   <div class="form-group CVV">
                     <label for="cvv">CVV</label>
-                    <input type="text" class="form-control" id="cvv">
+                    <input type="text" class="form-control" id="cvv" formControlName="checkCvv">
                   </div>
                   <div class="form-group" id="expiration-date">
                     <label class="expiracion">Fecha expiración</label>
-                    <select class="expiracion">
-                      <option value="01">Enero</option>
-                      <option value="02">Febero</option>
-                      <option value="03">Marzo</option>
-                      <option value="04">Abril</option>
-                      <option value="05">Mayo</option>
-                      <option value="06">Junio</option>
-                      <option value="07">Julio</option>
-                      <option value="08">Agosto</option>
-                      <option value="09">Septiembre</option>
-                      <option value="10">Octubre</option>
-                      <option value="11">Noviembre</option>
-                      <option value="12">Diciembre</option>
+                    
+                    <select class="expiracion" formControlName="checkMes" (change)="cambiarMes($event)">
+                      <option value="Enero">Enero</option>
+                      <option value="Febero">Febero</option>
+                      <option value="Marzo">Marzo</option>
+                      <option value="Abril">Abril</option>
+                      <option value="Mayo">Mayo</option>
+                      <option value="Junio">Junio</option>
+                      <option value="Julio">Julio</option>
+                      <option value="Agosto">Agosto</option>
+                      <option value="Septiembre">Septiembre</option>
+                      <option value="Octubre">Octubre</option>
+                      <option value="Noviembre">Noviembre</option>
+                      <option value="Diciembre">Diciembre</option>
                     </select>
-                    <select class="expiracion">
-                      <option value="16">2025</option>
-                      <option value="17">2026</option>
-                      <option value="18">2027</option>
-                      <option value="19">2028</option>
-                      <option value="20">2029</option>
-                      <option value="21">2030</option>
+                    <select class="expiracion" formControlName="checkAnyo" (change)="cambiarAnio($event)">
+                      <option value="2025">2025</option>
+                      <option value="2026">2026</option>
+                      <option value="2027">2027</option>
+                      <option value="2028">2028</option>
+                      <option value="2029">2029</option>
+                      <option value="2030">2030</option>
                     </select>
                   </div>
                   <div class="form-group">
                     <label for="amount">Saldo:</label>
                     <input type="number" min="1" class="form-control" id="saldo" name="saldo" formControlName="saldo" required>
                   </div>
-                  <button type="submit" class="btn btn-dark mt-2 btnSaldo">Recargar</button>
+                  <button type="submit" class="btn btn-dark mt-2 btnSaldo" [disabled]="form.invalid">Recargar</button>
                 </form>
-               
+                <h3>TARJETAS</h3>
+            @for(tarjeta of tarjetas; track tarjeta){
+                <div class="card mb-3" [class.active]="tarjeta === tarjetaActiva">
+                  <div class="card-body">
+                    <h5>  **** **** **** {{ getLastFourDigits(tarjeta.numero) }}</h5>
+                    <button class="btn btn-dark btn-sm" (click)="marcarComoActiva(tarjeta)">Seleccionar</button>
+                  </div>
+                </div>
+            }
               </div>
-              
             </div>
           </div>
           
@@ -106,7 +114,7 @@
                [ngClass]="validClasses(password, 'is-valid', 'is-invalid')"
                />
                @if(password.errors?.['minlength']){
-                <div class="invalid-feedback">Password must have at least 4 letters</div>
+                <div class="invalid-feedback">La contrasena debe tener al menos 4 letras</div>
                 }
                <label for="password2">Repite contraseña:</label>
                <input type="password"
@@ -118,22 +126,93 @@
                  [ngClass]="validClasses(password2, 'is-valid', 'is-invalid')"
                  />
                  @if(password2.errors?.['minlength']){
-                  <div class="invalid-feedback">Password must have at least 4 letters</div>
-                  }
-                  
+                  <div class="invalid-feedback">La contraseña debe tener al menos 4 letras</div>
+                  }         
              </div>
              <button type="submit" class="btn btn-dark" [disabled]="formPassword.invalid">Guardar cambios</button>
              @if(formPassword.hasError('equalPass') && formPassword.touched){
               <div class="col my-auto text-danger">
-                Emails must be the same
+                Las contrasenas no coinciden
               </div> }
            </form>
          </div>
         </div>
-     
+        
+        <div *ngIf="activeTab2 === 'nombre'"> 
+          <div class="mb-3">        
+            <form [formGroup]="formNombre" (ngSubmit)="changeNombre()">
+             <div class="mb-3">
+               <label for="nombreActual">Nombre actual:</label>
+               <input 
+               type="text" 
+               class="form-control" 
+               placeholder="Nombre de usuario actual" 
+               formControlName="nombreActual"
+               [ngClass]="validClasses(password, 'is-valid', 'is-invalid')"
+               />
+             
+               <label for="nuevoNombre">Nuevo nombre:</label>
+               <input type="text"
+                class="form-control"
+                 placeholder="Nuevo nombre de usuario"  
+                 formControlName="nuevoNombre"
+                 />
+             </div>
+             <button type="submit" class="btn btn-dark" [disabled]="formNombre.invalid">Guardar cambios</button>
+           </form>
+         </div>
         </div>
+      </div>
        
-
+      <div *ngIf="activeTab2 === 'tarjeta'">
+        <div class="container mt-4">
+          <h3>AÑADIR TARJETA</h3>
+    
+          <div class="row">
+            <div class="col-md-8">
+              <form (ngSubmit)="anadirTarjeta()" [formGroup]="formTarjeta">
+                <div class="form-group" id="card-number-field">
+                  <label for="cardNumber">Número de la tarjeta</label>
+                  <input type="text" class="form-control" id="cardNumber" formControlName="numeroTarjeta">
+                </div>
+                
+                <div class="form-group CVV">
+                  <label for="cvv">CVV</label>
+                  <input type="text" class="form-control" id="cvv" formControlName="cvv">
+                </div>
+                <div class="form-group" id="expiration-date">
+                  <label class="expiracion">Fecha expiración</label>
+                  
+                  <select class="expiracion" formControlName="mes" (change)="cambiarMes($event)">
+                    <option value="Enero">Enero</option>
+                    <option value="Febero">Febero</option>
+                    <option value="Marzo">Marzo</option>
+                    <option value="Abril">Abril</option>
+                    <option value="Mayo">Mayo</option>
+                    <option value="Junio">Junio</option>
+                    <option value="Julio">Julio</option>
+                    <option value="Agosto">Agosto</option>
+                    <option value="Septiembre">Septiembre</option>
+                    <option value="Octubre">Octubre</option>
+                    <option value="Noviembre">Noviembre</option>
+                    <option value="Diciembre">Diciembre</option>
+                  </select>
+                  <select class="expiracion" formControlName="anyo" (change)="cambiarAnio($event)">
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                    <option value="2029">2029</option>
+                    <option value="2030">2030</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-dark mt-2 btnSaldo" [disabled]="formTarjeta.invalid">Añadir tarjeta</button>
+              </form>
+             
+            </div>
+          </div>
+        </div>
+      </div>
     }
   </div>
   <div class="mt-4" id="map">
@@ -169,12 +248,10 @@
       [ngClass]="{ 'active': activeTab === 'ventas' }">Mis Ventas</button>
     <button (click)="setActiveTab('finalizadas')" class="btn btn-outline-dark me-2"
       [ngClass]="{ 'active': activeTab === 'finalizadas' }">Finalizadas</button>
-
   </div>
   <div class="tab-content ">
     <div *ngIf="activeTab === 'finalizadas'">
       <h1>Finalizadas</h1>
-     
       <div class="container-fluid ml-3">
         @for (transaccion of transaccionesFinalizadas; track transaccion._id)
         {
@@ -312,12 +389,11 @@
                 <p class="card-text">Vendedor: {{transaccion.idVendedor.nombre}}</p>
                 <p class="card-text">Artículo: {{transaccion.idArticulo.titulo}}</p>
                 <p class="card-text">Fecha: {{transaccion.fecha | date: 'MM/dd/yyyy'}}</p>
-
+                <p class="card-text">Precio: {{transaccion.propuesta}}</p>
                 @if(transaccion.estado == 'Pendiente')
                 {
                 <span class="badge bg-warning">Pendiente</span>
                 }
-
                 @else if(transaccion.estado == 'Rechazada')
                 {
                 <span class="badge bg-danger">Rechazada</span>
@@ -331,8 +407,6 @@
                 <button type="button" class="btn btn-dark me-2 mt-3"
                   (click)="finalizarTransaccion(transaccion._id)">Finalizar</button>
                 }
-
-
               </div>
             </div>
           </div>
@@ -344,11 +418,7 @@
         }
         }
       </div>
-
     </div>
-
-
-
   </div>
   }
 

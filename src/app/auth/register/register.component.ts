@@ -62,7 +62,7 @@ export class RegisterComponent implements OnInit{
   }
 
 
-  async register(): Promise<void> {
+   register() {
     const usuario: UsuarioRegistro = {
       nombre: this.formGroup.value.nombre,
       email: this.formGroup.value.email,
@@ -72,7 +72,7 @@ export class RegisterComponent implements OnInit{
     };
   
     try {
-      const existingUser = await this.checkForExistingUser(usuario.nombre, usuario.email);
+      const existingUser =  this.checkForExistingUser(usuario.nombre, usuario.email);
       if (existingUser) {
         Swal.fire({
           icon: 'error',
@@ -89,10 +89,11 @@ export class RegisterComponent implements OnInit{
             title: 'Se ha registrado correctamente',
             text: 'Redirigiendo a login...',
             showConfirmButton: false,
-            timer: 1500,
+            timer: 2500,
             timerProgressBar: true
+          }).then(() => {
+            this.#router.navigate(['/auth/login']);
           });
-          this.#router.navigate(['/login']);
 
         },
         error: (error) => {
@@ -112,8 +113,8 @@ export class RegisterComponent implements OnInit{
       });
     }
   }
-  public async checkForExistingUser(nombre: string | undefined, email: string | undefined): Promise<Usuario | null> {
-      const existingUser = this.usuarios.find(user => user.nombre === nombre || user.email === email);
+   checkForExistingUser(nombre: string | undefined, email: string | undefined): Usuario | null {
+      const existingUser = this.usuarios.find(user => user.nombre.toLowerCase() === nombre?.toLowerCase() || user.email.toLowerCase() === email?.toLowerCase());
       return existingUser || null;
   }
   

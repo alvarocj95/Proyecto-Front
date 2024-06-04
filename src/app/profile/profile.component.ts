@@ -13,7 +13,7 @@ import { ProfileService } from './services/profile.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserPasswordEdit, Usuario } from '../auth/interfaces/usuarios';
-import { UsuarioResponse } from '../auth/interfaces/responses';
+import { Tarjeta, UsuarioResponse } from '../auth/interfaces/responses';
 import { SsrCookieService } from 'ngx-cookie-service-ssr';
 import { VideojuegoService } from '../videojuegos/services/videojuego.service';
 import { Videojuego } from '../videojuegos/interfaces/videojuego';
@@ -46,9 +46,16 @@ import { FiltroTransacciones } from '../videojuegos/pipes/filtroTransacciones';
 })
 export class ProfileComponent implements OnInit {
  
+  constructor(
+    private cdr: ChangeDetectorRef,
+    // otros servicios inyectados...
+  ) {}
+
+  
   #profileService = inject(ProfileService);
   #videojuegoService = inject(VideojuegoService);
   usuario!: Usuario;
+  usuarios!: Usuario[];
   @Input() id!: string;
   cookieService = inject(SsrCookieService);
   videoJuegos: Videojuego[] = [];
@@ -57,16 +64,35 @@ export class ProfileComponent implements OnInit {
   #router = inject(Router);
   #transaccionService = inject(TransaccionService);
   transacciones!: Transaccion[];
+  tarjetas!: Tarjeta[];
   transaccionesFinalizadas!: Transaccion[];
   transaccionArticulo!: Transaccion;
   #fb = inject(NonNullableFormBuilder);
   password = this.#fb.control('',[Validators.required, Validators.minLength(4)]);  
   password2 = this.#fb.control('',[Validators.required, Validators.minLength(4)]);
+  nombreActual = this.#fb.control('', [Validators.required, Validators.minLength(4)]);
+  nuevoNombre = this.#fb.control('', [Validators.required, Validators.minLength(4)]);
   saldo = this.#fb.control(1, [Validators.required, Validators.min(1)]);
+  numeroTarjeta = this.#fb.control('', [Validators.required, Validators.minLength(14), Validators.maxLength(14)]);
+  checkNumeroTarjeta = this.#fb.control('', [Validators.required, Validators.minLength(14), Validators.maxLength(14)]);
+  checkCvv = this.#fb.control('', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]);
+  cvv = this.#fb.control('', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]);
+  checkMes = this.#fb.control('Enero', [Validators.required, Validators.minLength(2)]);
+  mes = this.#fb.control('Enero', [Validators.required, Validators.minLength(2)]);
+  checkAnyo = this.#fb.control('2025', [Validators.required, Validators.minLength(2)]);
+  anyo = this.#fb.control('2025', [Validators.required, Validators.minLength(2)]);
   activeTab: string = 'compras'; 
-  activeTab2: string = 'saldo';
+  activeTab2: string = 'tarjeta';
+  selectedFilter: string = 'none'; 
+  tarjetaActiva: any; 
+
+
   
   form = this.#fb.group({
+    checkCvv: this.checkCvv,
+    checkMes: this.checkMes,
+    checkAnyo: this.checkAnyo,
+    checkNumeroTarjeta: this.checkNumeroTarjeta,
     saldo: this.saldo,
   });
 
@@ -77,13 +103,27 @@ export class ProfileComponent implements OnInit {
     }, {validators: this.equalPass}
   );
 
+  formNombre = this.#fb.group(
+    {
+      nombreActual: this.nombreActual,
+      nuevoNombre: this.nuevoNombre
+    }
+  );
 
+  formTarjeta = this.#fb.group(
+    {
+      numeroTarjeta: this.numeroTarjeta,
+      cvv: this.cvv,
+      mes: this.mes,
+      anyo: this.anyo
+    }
+  );
   
   equalPass():ValidatorFn{
     return (control: AbstractControl): ValidationErrors | null => {
       const pass1 = control.get('password')?.value;
       const pass2 = control.get('password2')?.value;
-      if (pass1 != pass2) {
+      if (pass1.toLowerCase() != pass2.toLowerCase()) {
         return { email: true };
       }
       return null;      
@@ -128,6 +168,14 @@ export class ProfileComponent implements OnInit {
             },
           })
         
+          this.#profileService.getTarjetas(this.usuario._id).subscribe({
+            next: (tarjetas) => {
+              this.tarjetas = tarjetas.tarjetas;
+            },
+            error: (error) => {
+              console.error('Error al obtener las tarjetas:', error);
+            },
+          })
           this.#videojuegoService
             .getVideojuegosJugador(this.usuario._id)
             .subscribe({
@@ -161,6 +209,8 @@ export class ProfileComponent implements OnInit {
         },
       });
     }
+    this.obtenerUsuarios();
+
   }
 
   changeRating(rating: number) {
@@ -184,80 +234,156 @@ export class ProfileComponent implements OnInit {
   setActiveTab2(tab: string): void {
     this.activeTab2 = tab;
   }
-  // recargarSaldo(){
-  //   const saldo = this.form.value.saldo;
-  //   this.#profileService.actualizarSaldo(this.usuario._id, this.saldo.value).subscribe({
-  //     next: () => {
-  //       Swal.fire({
-  //         icon: 'success',
-  //         title: 'Saldo actualizado',
-  //       })
-  //       this.#profileService.getMiPerfil().subscribe({
-  //         next: (user) => {
-  //           this.usuario = user.resultado;
-  //         },
-  //         error: (error) => {
-  //           console.error('Error al obtener el perfil:', error);
-  //         },
-  //       })
-  //     },
-      
-  //     error: () => {
-  //       this.ngOnInit();
-  //     },
-  //   })
-  // }
-  constructor(private cd: ChangeDetectorRef) {
-  }
+  recargarSaldo(){
 
-  recargarSaldo() {
+    if(this.tarjetaActiva === undefined){
+      Swal.fire({
+        icon: 'warning',
+        title: 'Tarjeta no valida',
+        text: 'Por favor, agrega una tarjeta',
+        showConfirmButton: true
+    }
+    )
+      return;
+    }
+
+    if(this.checkAnyo.value !== this.tarjetaActiva.anyo || this.checkMes.value !== this.tarjetaActiva.mes || this.checkCvv.value !== this.tarjetaActiva.cvv || "ES" + this.checkNumeroTarjeta.value !== this.tarjetaActiva.numero){
+
+      Swal.fire({
+        icon: 'warning',
+        title: 'Tarjeta no valida',
+        text: 'Por favor, revisa los datos de tu tarjeta',
+        showConfirmButton: true
+    }
+    )
+      return;
+    }
+
+    
+    
     const saldo = this.form.value.saldo;
     this.#profileService.actualizarSaldo(this.usuario._id, this.saldo.value).subscribe({
-      next: () => {
+      next: (saldo) => {
+        
         Swal.fire({
           icon: 'success',
           title: 'Saldo actualizado',
-        });
-        
-        this.usuario.saldo += this.saldo.value;
-        this.cd.detectChanges(); 
-
-        
-        this.#profileService.getMiPerfil().subscribe({
-          next: (user) => {
-            this.usuario = user.resultado;
-            this.cd.detectChanges(); 
-          },
-          error: (error) => {
-            console.error('Error al obtener el perfil:', error);
-          },
-        });
+        })
+        this.form.reset();
+        this.ngOnInit();
       },
+      
       error: () => {
         this.ngOnInit();
       },
-    });
+    })
   }
   
   changePass(){
-    const newPass: UserPasswordEdit = {
-      ...this.formPassword.getRawValue()
-    };
-    this.#profileService.editPassword(this.usuario._id, newPass.password).subscribe({
-      next:()=>{
+    
+    if(this.password.value === this.password2.value){
+      const newPass: UserPasswordEdit = {
+        ...this.formPassword.getRawValue()
+      };
+
+      this.#profileService.editPassword(this.usuario._id, newPass.password).subscribe({
+        next:()=>{
+          Swal.fire({
+            icon: 'success',
+            title: 'Contraseña actualizada',
+            text: 'Redirigiendo a login...',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true
+          })
+          this.logout();
+          this.#router.navigate(['/login']);
+        },
+        error: (error) => console.error(error),
+      })
+    }
+    else{
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Las contraseñas no coinciden',
+      })
+    }
+    
+  }
+
+  obtenerUsuarios(){
+    this.#profileService.getUsuarios().subscribe({
+      next: (users) => {
+        this.usuarios = users.usuarios;
+      },
+      error: (error) => {
+        console.error('Error al obtener los usuarios:', error);
+      },  
+    });
+  }
+
+  checkForExistingUser(nombre: string | undefined): Usuario | null {
+    const existingUser = this.usuarios.find(user => user.nombre.toLowerCase() === nombre?.toLowerCase());
+    return existingUser || null;
+}
+
+
+
+
+changeNombre() {
+  const nuevoNombre = this.nuevoNombre.value;
+  try {
+    const existingUser = this.checkForExistingUser(nuevoNombre);
+    if (existingUser) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'El nombre introducido ya existe. Por favor, elige otro nombre',
+      });
+      return;
+    }
+
+    if (this.nombreActual.value !== this.usuario?.nombre) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Debes introducir tu nombre actual para confirmar el cambio',
+      });
+      return;
+    }
+
+    this.#profileService.editNombre(this.usuario._id, nuevoNombre).subscribe({
+      next: () => {
         Swal.fire({
           icon: 'success',
-          title: 'Contraseña actualizada',
-          text: 'Redirigiendo a login...',
+          title: 'Nombre actualizado',
+          text: 'Redirigiendo a perfil...',
           showConfirmButton: false,
           timer: 1500,
           timerProgressBar: true
-        })
-        this.#router.navigate(['/login']);
+        }).then(() => {
+         this.usuario.nombre = nuevoNombre;
+        });
       },
-      error: (error) => console.error(error),
-    })
+      error: (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Error al actualizar el nombre',
+        });
+        console.error(error);
+      }
+    });
+  } catch (error) {
+    console.error('Error checking for existing user:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Error al actualizar el nombre',
+    });
   }
+}
 
 
   confirmarVenta(id: string) {
@@ -335,28 +461,68 @@ export class ProfileComponent implements OnInit {
     };
   }
 
-  selectedFilter: string = 'none'; 
+  cambiarMes(event: Event) :void{
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.mes.setValue(String(selectedValue));
+  }
 
-  // onFilterChange() {
-  //   if (this.selectedFilter === 'none') {
-  //     return;
-  //   }
+  cambiarAnio(event: Event) :void{
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.anyo.setValue(String(selectedValue));
+  }
 
-  //   const filteredGames = this.transacciones.slice();
+  anadirTarjeta() {
+    const nuevaTarjeta: Tarjeta = {
+      idUsuario: this.usuario._id,
+      numero: "ES" +this.formTarjeta.get('numeroTarjeta')?.value,
+      cvv: this.formTarjeta.get('cvv')?.value,
+      mes: this.formTarjeta.get('mes')?.value,
+      anyo: this.formTarjeta.get('anyo')?.value
+    }
 
-  //   switch (this.selectedFilter) {
-  //     case 'Aceptada':
-  //       filteredGames.sort((a, b) => b.f - a.lanzamiento);
-  //       break;
-  //     case '-date':
-  //       filteredGames.sort((a, b) => a.lanzamiento - b.lanzamiento);
-  //       break;
-  //     case 'price':
-  //       filteredGames.sort((a, b) => a.precio - b.precio);
-  //       break;
-  //     case '-price':
-  //       filteredGames.sort((a, b) => b.precio - a.precio);
-  //       break;
-  //   }
-  // }
+    if(isNaN(Number(nuevaTarjeta.cvv))){
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'El CVV debe ser un número',
+      });
+      return;
+    }
+    else if(isNaN(Number(this.formTarjeta.get('numeroTarjeta')?.value))){
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'El número de la tarjeta debe ser un número',
+      });
+      return;
+    }
+
+    console.log(nuevaTarjeta);
+
+    this.#profileService.anadirTarjeta(this.usuario._id, nuevaTarjeta).subscribe({
+      next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Tarjeta anadida',
+          text: 'Redirigiendo a perfil...',
+          showConfirmButton: false,
+          timer: 2500,
+          timerProgressBar: true
+        })
+        this.formTarjeta.reset();
+        this.ngOnInit();
+      },
+      error: (error) => { 
+        console.error(error);
+      } 
+    });
+  }
+
+  getLastFourDigits(numero: string | undefined): string {
+    return numero!.slice(-4);
+  }
+
+  marcarComoActiva(tarjeta: any): void {
+    this.tarjetaActiva = tarjeta;
+  }
 }

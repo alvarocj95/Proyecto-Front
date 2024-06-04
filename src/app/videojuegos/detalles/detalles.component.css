@@ -47,7 +47,7 @@ a{
 }
 
 a:hover {
-    color: orange;
+    color: #FFD580;
   }
 
   .image-container {
@@ -158,4 +158,5 @@ a:hover {
     border-radius: 50%;
     object-fit: cover; 
     margin-top: 1rem; 
+    cursor: pointer;
   }

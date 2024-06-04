@@ -6,11 +6,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const cookieService = inject(SsrCookieService)
     const token = cookieService.get('token');
   
-    if (token) { // Estamos autenticados
+    if (token) { 
       const authReq = req.clone({
         headers: req.headers.set('Authorization', 'Bearer ' + token),
       });
-      return next(authReq); // Petición con credenciales
+      return next(authReq); 
     }
-    return next(req); // Petición sin credenciales
+    return next(req); 
   };

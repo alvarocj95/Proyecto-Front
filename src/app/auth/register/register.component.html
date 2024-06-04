@@ -13,6 +13,9 @@
                 <div class="form-group">
                     <label for="password">Email</label>
                     <input type="email" id="email" name="email" required="required" formControlName="email"/>
+                    @if(email.errors?.['email']){
+                      <div class="invalid-feedback">Debe ser un email valido</div>
+                      }
                 </div>
                 <div class="form-group">
                     <label for="password">Contraseña</label>

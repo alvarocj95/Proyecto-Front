@@ -7,21 +7,23 @@
         <div class="form-content">
             <form [formGroup]="formGroup" (ngSubmit)="login()">
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="username">Nombre usuario</label>
                     <input type="text" id="username" name="username" required="required" formControlName="nombre"/>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Contraseña</label>
                     <input type="password" id="password" name="password" required="required" formControlName="password"/>
                 </div>
                 <div class="form-group">
                     <label class="form-remember">
-                        <input type="checkbox" />Remember Me
-                    </label><a class="form-recovery" href="#">Forgot Password?</a>
+                    </label><a class="form-recovery" href="#">¿Has olvidado tu contraseña?</a>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-dark"  [disabled]="formGroup.invalid">Log In</button>
-                    <a class="btn btn-dark btn-sm mt-4" [routerLink]="['/auth/registro']">Registro</a>
+                </div>
+                <div>
+                    <p>¿No tienes cuenta?</p>
+                    <a class="btn btn-dark btn-sm mt-4" [routerLink]="['/auth/registro']">Regístrate</a>
                 </div>
             </form>
         </div>

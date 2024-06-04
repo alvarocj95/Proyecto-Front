@@ -48,13 +48,4 @@ constructor() {
   })
 }
 
-// cambiarTema() {
-//   this.darkMode = !this.darkMode; 
-
-//   sessionStorage.setItem('theme', this.darkMode ? 'dark' : 'light');
-
-//   document.documentElement.classList.remove('light', 'dark'); 
-//   document.documentElement.classList.add(this.darkMode ? 'dark' : 'light'); 
-// }
-
 }

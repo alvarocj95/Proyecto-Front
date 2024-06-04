@@ -12,25 +12,23 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" [routerLink]="['/videojuegos']" >Inicio</a>
+              <a class="nav-link active" aria-current="page" [routerLink]="['/videojuegos']">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" [routerLink]="['/videojuegos/consolas']" >Consolas</a>
+              <a class="nav-link active" [routerLink]="['consolas']" >Consolas</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" [routerLink]="['/videojuegos/juegos']" >Videojuegos</a>
+              <a class="nav-link active" [routerLink]="['juegos']" >Videojuegos</a>
             </li>
             @if(logged())
             {
               <li class="nav-item">
-                <a class="nav-link active" [routerLink]="['/videojuegos/nuevo']">Sube tu anuncio</a>
+                <a class="nav-link active" [routerLink]="['/videojuegos/nuevo']" >Sube tu anuncio</a>
               </li>
             }
            
            
-          </ul>
-          <!-- <button class="btn btn-dark" (click)="cambiarTema()">Cambiar tema </button> -->
-         
+          </ul>         
          
           @if(logged()){
             <a class="nav-link" [routerLink]="['/likes']">
@@ -40,9 +38,13 @@
          
           @if(!logged())
           {
-            <a class="nav-link" [routerLink]="['/auth/registro']" [routerLinkActive]="['active']">
-              <img src="/assets/robot.png" id="iconoLogin"  alt="" width="40px">
-            </a>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <a class="nav-link" [routerLink]="['/auth/login']" [routerLinkActive]="['active']" style="text-align: center;">
+                <img src="/assets/robot.png" id="iconoLogin" alt="" width="40px">
+                <p>Inicio sesión</p>
+              </a>
+            </div>
+            
           }
           @if(logged())
             {
@@ -51,9 +53,6 @@
                   <img class="logout" [src]="usuarioLogueado.imagen" id="iconoLogout"  alt="" width="40px">
                 </a>
               }
-                <!-- <a class="nav-link text-light"  [routerLinkActive]="['active']"  [routerLink]="['/profile/me']">
-                  <img class="logout" src="/assets/robot.png" id="iconoLogout"  alt="" width="40px">
-                </a> -->
             }
         </div>
       </div>

@@ -3,48 +3,40 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: 'auth', 
-    title: 'Login',
-    loadChildren() {
-      return import('./auth/auth.routes').then(
-        (m) => m.routesAuth
-      );
-    },
+    title: 'Bienvenidos a RetroGaming',
+    loadChildren: () => import('./auth/auth.routes').then((m) => m.routesAuth)
   },
   {
     path: 'videojuegos',
     title: 'Videojuegos',
-    loadChildren() {
-      return import('./videojuegos/videojuegos.routes').then(
-        (m) => m.videojuegoRoutes
-      );
-    },
+    loadChildren: () => import('./videojuegos/videojuegos.routes').then((m) => m.videojuegoRoutes)
+  },
+  {
+    path: 'juegos',
+    title: 'Juegos',
+    loadComponent: () =>
+      import('./videojuegos/juegos/juegos.component').then((m) => m.JuegosComponent),
+  },
+  {
+    path: 'consolas',
+    title: 'Consolas',
+    loadComponent: () =>
+      import('./videojuegos/consolas/consolas.component').then((m) => m.ConsolasComponent),
   },
   {
     path: 'avisolegal',
     title: 'Aviso legal',
-    loadComponent() {
-      return import('./avisolegal/avisolegal.component').then(
-        (m) => m.AvisolegalComponent
-      );
-    },
+    loadComponent: () => import('./avisolegal/avisolegal.component').then((m) => m.AvisolegalComponent),
   },
   {
     path: 'contacto',
     title: 'Contacto',
-    loadComponent() {
-      return import('./contacto/contacto.component').then(
-        (m) => m.ContactoComponent
-      );
-    },
+    loadComponent: () => import('./contacto/contacto.component').then((m) => m.ContactoComponent),
   },
   {
     path: 'sobrenosotros',
     title: 'Sobre nosotros',
-    loadComponent() {
-      return import('./sobrenosotros/sobrenosotros.component').then(
-        (m) => m.SobrenosotrosComponent
-      );
-    },
+    loadComponent: () => import('./sobrenosotros/sobrenosotros.component').then((m) => m.SobrenosotrosComponent),
   },
   {
     path: 'profile',
@@ -54,14 +46,10 @@ export const routes: Routes = [
   {
     path: 'likes',
     title: 'Mi lista de deseos',
-    loadComponent() {
-      return import('./likes/likes.component').then(
-        (m) => m.LikesComponent
-      );
-    },
+    loadComponent: () => import('./likes/likes.component').then((m) => m.LikesComponent),
   },
   { path: '', pathMatch: 'full', redirectTo: '/auth/login' },
-  // ...
+
   { path: '**', redirectTo: '/auth/login' },
  
 ];

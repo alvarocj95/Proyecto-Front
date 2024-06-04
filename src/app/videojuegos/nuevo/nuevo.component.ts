@@ -5,6 +5,9 @@ import { VideojuegoNuevo } from '../interfaces/videojuego';
 import { Router } from '@angular/router';
 import { Usuario } from '../../auth/interfaces/usuarios';
 import { ProfileService } from '../../profile/services/profile.service';
+import Swal, { SweetAlertResult } from 'sweetalert2';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-nuevo',
@@ -49,9 +52,30 @@ export class NuevoComponent implements OnInit{
   image2Base64 : string = '';
   image3Base64 : string = '';
   image4Base64 : string = '';
+  saved = false;
+
+
 
   
-
+  async canDeactivate(): Promise<boolean>{
+    if (this.saved || this.form.pristine) {
+      return true; 
+    }
+  
+    const confirmResult = await Swal.fire({
+      title: 'Los cambios no han sido guardados',
+      text: '¿Deseas abandonar la página?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Abandonar',
+      cancelButtonText: 'Cancelar'
+    });
+  
+    return confirmResult.isConfirmed; 
+  }
+  
   
   form = this.#fb.group({
     titulo: this.titulo,

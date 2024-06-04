@@ -17,5 +17,16 @@ export interface UsuariosRespone {
     usuarios: Usuario[];
 }
 
+export interface TarjetasResponse {
+    tarjetas: Tarjeta[];
+}
+
+export interface Tarjeta{
+   idUsuario: string; 
+   numero: string | undefined,
+   cvv: string | undefined,
+   mes: string | undefined,
+   anyo: string | undefined 
+}
 
 

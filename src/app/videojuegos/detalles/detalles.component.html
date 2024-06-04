@@ -1,3 +1,4 @@
+@if(videojuego){
 <div class="row" id="infoCompleta">
     <div class="col-lg-6 divimagen">
         <div id="imagenJuego" class="mb-4">
@@ -33,7 +34,7 @@
                     @else {
                         <img src="/assets/defecto.jpg" alt="">
                     }
-                </div>
+                </div>   
             </div>
         </div>
         <div id="precios">
@@ -66,18 +67,25 @@
             <div class="container mt-4">
                 <i class="fa-solid fa-handshake hand"></i>
                 <h4>{{totalTransacciones}} veces contactado</h4>
-            </div>
-            @if(usuarioLogueado._id != videojuego.idUsuario && logged() ){
-                <button type="button" class="btn btn-dark mt-4 btn-lg" (click)="addCarrito()">Iniciar Compra</button>
-            }
-            <img id="avatar" class="mt-4" src="{{ usuario?.imagen }}" alt="" [routerLink]="['/profile/', usuario?._id]">
 
+            </div>
+            <div>
+                <img id="avatar" class="mt-4" src="{{ usuario?.imagen }}" alt="" [routerLink]="['/profile/', usuario?._id]">
+
+            </div>
+            @if(usuarioLogueado){
+                <p>{{usuarioLogueado._id}}</p>
+                @if(usuarioLogueado._id != videojuego.idUsuario && logged() ){
+                    <button type="button" class="btn btn-dark mt-4 btn-lg" (click)="addCarrito()">Iniciar Compra</button>
+                   
+                }
+            }
         </div>
         
      
     </div>
 </div>
-
+}
 
 
 

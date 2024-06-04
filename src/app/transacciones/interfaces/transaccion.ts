@@ -12,6 +12,7 @@ export interface Transaccion{
     estado: 'Pendiente' | 'Aceptada' | 'Rechazada' | 'Finalizada';
     finalComprador: Usuario;
     finalVendedor: Usuario;
+    propuesta: number;
 }
 
 

@@ -10,12 +10,13 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../auth/services/auth.service';
 import { LikesService } from '../../likes/likes.service';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-detalles',
   standalone: true,
-  imports: [RouterLink, SweetAlert2Module],
+  imports: [RouterLink, SweetAlert2Module, CommonModule],
   templateUrl: './detalles.component.html',
   styleUrl: './detalles.component.css'
 })
@@ -48,11 +49,15 @@ export class DetallesComponent implements OnInit{
               this.usuario = user.resultado;
             }
           })
-          this.#profileService.getMiPerfil().subscribe({
-            next: (user) => {
-              this.usuarioLogueado = user.resultado;
-            }
-          })
+          if(this.logged()) {
+            this.#profileService.getMiPerfil().subscribe({
+              next: (user) => {
+                this.usuarioLogueado = user.resultado;
+                console.log(this.usuarioLogueado);
+              }
+            })
+          }
+        
         },
         error: (error) => {
           console.error("Error al obtener el videojuego:", error);
